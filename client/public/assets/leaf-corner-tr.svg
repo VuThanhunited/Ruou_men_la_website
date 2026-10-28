@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" fill="none">
+  <!-- Main branch -->
+  <path d="M280 20 C240 60, 180 80, 120 140 C80 180, 40 230, 20 280" stroke="#263E23" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.6"/>
+  <!-- Leaf 1 -->
+  <path d="M240 55 C260 30, 290 25, 280 20 C270 35, 255 50, 240 55Z" fill="#263E23" opacity="0.5"/>
+  <path d="M240 55 C250 40, 265 32, 280 20" stroke="#1B3018" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <!-- Leaf 2 -->
+  <path d="M200 95 C225 65, 260 58, 248 48 C230 68, 210 85, 200 95Z" fill="#263E23" opacity="0.45"/>
+  <path d="M200 95 C218 72, 238 62, 248 48" stroke="#1B3018" stroke-width="1.5" fill="none" opacity="0.4"/>
+  <!-- Leaf 3 -->
+  <path d="M160 135 C185 105, 215 95, 205 82 C188 108, 168 125, 160 135Z" fill="#3a5c35" opacity="0.4"/>
+  <!-- Leaf 4 -->
+  <path d="M125 170 C148 142, 175 130, 165 118 C150 143, 133 162, 125 170Z" fill="#263E23" opacity="0.38"/>
+  <!-- Leaf 5 small -->
+  <path d="M90 210 C108 188, 130 178, 122 166 C110 187, 97 205, 90 210Z" fill="#3a5c35" opacity="0.35"/>
+  <!-- Leaf 6 small -->
+  <path d="M55 248 C72 228, 94 218, 86 207 C74 227, 62 244, 55 248Z" fill="#263E23" opacity="0.3"/>
+  <!-- Small decorative berries -->
+  <circle cx="252" cy="42" r="4" fill="#C59B5F" opacity="0.6"/>
+  <circle cx="178" cy="112" r="3" fill="#C59B5F" opacity="0.5"/>
+  <circle cx="108" cy="178" r="3.5" fill="#C59B5F" opacity="0.4"/>
+</svg>

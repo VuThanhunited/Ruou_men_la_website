@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- Circle Background -->
+  <circle cx="24" cy="24" r="22" fill="#263E23" />
+  <circle cx="24" cy="24" r="21" stroke="#C59B5F" stroke-opacity="0.3" stroke-width="1" />
+  <!-- Center Leaf -->
+  <path d="M24 13C27 19 28 25 24 33C20 25 21 19 24 13Z" stroke="#F5EFE0" stroke-width="1.8" stroke-linejoin="round"/>
+  <line x1="24" y1="17" x2="24" y2="33" stroke="#F5EFE0" stroke-width="1.4" stroke-linecap="round"/>
+  <!-- Left Leaf -->
+  <path d="M21 27C16 26 13 22 14 17C19 17 22 21 22 26" stroke="#F5EFE0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Right Leaf -->
+  <path d="M27 27C32 26 35 22 34 17C29 17 26 21 26 26" stroke="#F5EFE0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Stem -->
+  <path d="M24 33V35" stroke="#F5EFE0" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,59 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import AdminLoginPage from './pages/AdminLoginPage';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminHeroPage from './pages/AdminHeroPage';
+import AdminProductsPage from './pages/AdminProductsPage';
+import AdminProcessPage from './pages/AdminProcessPage';
+import AdminBrandStoryPage from './pages/AdminBrandStoryPage';
+import AdminTestimonialsPage from './pages/AdminTestimonialsPage';
+import AdminSiteConfigPage from './pages/AdminSiteConfigPage';
+import AdminSubscribersPage from './pages/AdminSubscribersPage';
+
+// Protected route wrapper
+function ProtectedRoute({ children }) {
+  const token = localStorage.getItem('adminToken');
+  if (!token) return <Navigate to="/login" replace />;
+  return children;
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Auth */}
+        <Route path="/login" element={<AdminLoginPage />} />
+
+        {/* Redirect gốc về dashboard */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+        {/* Protected admin routes */}
+        <Route path="/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/hero"        element={<ProtectedRoute><AdminHeroPage /></ProtectedRoute>} />
+        <Route path="/products"    element={<ProtectedRoute><AdminProductsPage /></ProtectedRoute>} />
+        <Route path="/process"     element={<ProtectedRoute><AdminProcessPage /></ProtectedRoute>} />
+        <Route path="/brand-story" element={<ProtectedRoute><AdminBrandStoryPage /></ProtectedRoute>} />
+        <Route path="/testimonials" element={<ProtectedRoute><AdminTestimonialsPage /></ProtectedRoute>} />
+        <Route path="/site-config" element={<ProtectedRoute><AdminSiteConfigPage /></ProtectedRoute>} />
+        <Route path="/subscribers" element={<ProtectedRoute><AdminSubscribersPage /></ProtectedRoute>} />
+
+        {/* Catch all */}
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </BrowserRouter>
+  );
+}

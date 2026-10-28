@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- Circle Background -->
+  <circle cx="24" cy="24" r="22" fill="#263E23" />
+  <circle cx="24" cy="24" r="21" stroke="#C59B5F" stroke-opacity="0.3" stroke-width="1" />
+  <!-- Wine Jar / Jar with lid -->
+  <!-- Lid -->
+  <path d="M20 15H28C28.5 15 29 15.5 28.5 16L27.5 18H20.5L19.5 16C19 15.5 19.5 15 20 15Z" stroke="#F5EFE0" stroke-width="1.6" stroke-linejoin="round"/>
+  <!-- Jar Neck & Body -->
+  <path d="M21 18H27L30 22C32 25 32 29 29.5 32.5C28 34 26 34.5 24 34.5C22 34.5 20 34 18.5 32.5C16 29 16 25 18 22L21 18Z" stroke="#F5EFE0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Wine drop or emblem inside -->
+  <path d="M24 23C25 25 26 26.5 26 28C26 29.1 25.1 30 24 30C22.9 30 22 29.1 22 28C22 26.5 23 25 24 23Z" fill="#F5EFE0" fill-opacity="0.9"/>
+</svg>

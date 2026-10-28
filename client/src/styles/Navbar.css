@@ -1,0 +1,233 @@
+/* ============================================================
+   NAVBAR STYLES
+   ============================================================ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  transition: all 0.35s ease;
+}
+
+.navbar.transparent {
+  background: rgba(245, 239, 224, 0.0);
+  backdrop-filter: none;
+}
+
+.navbar.scrolled {
+  background: rgba(245, 239, 224, 0.97);
+  box-shadow: 0 2px 20px rgba(38, 62, 35, 0.12);
+  backdrop-filter: blur(12px);
+}
+
+.navbar .container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  gap: 1.5rem;
+}
+
+/* Logo */
+.navbar-logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo img {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid var(--color-accent-gold, #C59B5F);
+  box-shadow: 0 2px 12px rgba(38,62,35,0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar-logo img:hover {
+  transform: scale(1.06);
+  box-shadow: 0 4px 20px rgba(38,62,35,0.3);
+}
+
+/* Nav Links */
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  justify-content: center;
+}
+
+.navbar-nav li a {
+  display: block;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #1E271D;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.navbar-nav li a.active {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.navbar-nav li a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0.9rem;
+  right: 0.9rem;
+  height: 2px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+.navbar-nav li a:hover {
+  color: var(--color-primary);
+}
+
+/* Hotline Pill */
+.navbar-hotline {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.4rem 1.15rem 0.4rem 0.5rem;
+  background: var(--color-primary, #1C3319);
+  color: white;
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(28, 51, 25, 0.25);
+  transition: all 0.25s ease;
+}
+
+.navbar-hotline:hover {
+  background: var(--color-primary-light, #2D5229);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(28, 51, 25, 0.35);
+}
+
+.navbar-hotline-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #A3D9A5;
+}
+
+.navbar-hotline-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  text-align: left;
+}
+
+.navbar-hotline-label {
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: #A3D9A5;
+  letter-spacing: 0.04em;
+}
+
+.navbar-hotline-number {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+}
+
+/* Mobile Toggle */
+.navbar-mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-primary, #263E23);
+  padding: 0.4rem;
+}
+
+/* Mobile Menu */
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1100;
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 280px;
+  height: 100vh;
+  background: var(--color-bg, #F5EFE0);
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.5rem;
+  box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+
+.mobile-menu.open { right: 0; }
+
+.mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.mobile-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-primary, #263E23);
+  padding: 0.25rem;
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-primary, #263E23);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.mobile-menu a:hover {
+  background: rgba(38,62,35,0.08);
+}
+
+@media (max-width: 900px) {
+  .navbar-nav { display: none; }
+  .navbar-hotline { display: none; }
+  .navbar-mobile-toggle { display: flex; }
+  .mobile-overlay { display: block; }
+}

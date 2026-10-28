@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 40" fill="none">
+  <!-- Central diamond -->
+  <polygon points="300,8 308,20 300,32 292,20" fill="#C59B5F" opacity="0.8"/>
+  <!-- Left side -->
+  <line x1="0" y1="20" x2="260" y2="20" stroke="#C59B5F" stroke-width="1" opacity="0.4"/>
+  <line x1="200" y1="20" x2="260" y2="20" stroke="#C59B5F" stroke-width="1.5" opacity="0.6"/>
+  <!-- Small left diamond -->
+  <polygon points="265,14 271,20 265,26 259,20" fill="#C59B5F" opacity="0.5"/>
+  <!-- Small dots left -->
+  <circle cx="240" cy="20" r="2" fill="#C59B5F" opacity="0.5"/>
+  <circle cx="230" cy="20" r="1.5" fill="#C59B5F" opacity="0.4"/>
+  <!-- Right side mirror -->
+  <line x1="340" y1="20" x2="600" y2="20" stroke="#C59B5F" stroke-width="1" opacity="0.4"/>
+  <line x1="340" y1="20" x2="400" y2="20" stroke="#C59B5F" stroke-width="1.5" opacity="0.6"/>
+  <polygon points="335,14 341,20 335,26 329,20" fill="#C59B5F" opacity="0.5"/>
+  <circle cx="360" cy="20" r="2" fill="#C59B5F" opacity="0.5"/>
+  <circle cx="370" cy="20" r="1.5" fill="#C59B5F" opacity="0.4"/>
+  <!-- Leaf flourish center-left -->
+  <path d="M283 12 C286 6, 294 5, 292 10" stroke="#263E23" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <path d="M283 12 C286 8, 290 6, 292 10" fill="#263E23" opacity="0.4"/>
+  <!-- Leaf flourish center-right -->
+  <path d="M317 12 C314 6, 306 5, 308 10" stroke="#263E23" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <path d="M317 12 C314 8, 310 6, 308 10" fill="#263E23" opacity="0.4"/>
+</svg>
