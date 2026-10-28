@@ -6,11 +6,11 @@ const LEAF_TR = '/assets/leaf-corner-tr.svg';
 const LEAF_BL = '/assets/leaf-corner-bl.svg';
 const DIVIDER_SVG = '/assets/divider.svg';
 
-export default function BrandStorySection({ data }) {
+export default function BrandStorySection({ data, onOpenCompanyModal }) {
   if (!data) return null;
 
   return (
-    <section className="brand-story">
+    <section className="brand-story" id="gioi-thieu">
       {/* Background image được quản lý qua Admin */}
       {data.storyBgUrl ? (
         <div
@@ -71,19 +71,13 @@ export default function BrandStorySection({ data }) {
           <div className="brand-story-title-script">{data.subTitle}</div>
           <p className="brand-story-description">{data.description}</p>
           <div className="brand-story-btn-wrap">
-            <Link
-              to={data.buttonLink || '#gioi-thieu'}
+            <button
+              type="button"
               className="btn btn-outline-light"
-              onClick={(e) => {
-                const link = data.buttonLink || '#gioi-thieu';
-                if (link.startsWith('#')) {
-                  e.preventDefault();
-                  document.querySelector(link)?.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
+              onClick={onOpenCompanyModal}
             >
               {data.buttonText || 'VỀ CHÚNG TÔI'} <FiArrowRight />
-            </Link>
+            </button>
           </div>
         </div>
       </div>

@@ -6,7 +6,10 @@ import UspBar from '../components/UspBar';
 import SplitSection from '../components/SplitSection';
 import ProcessSection from '../components/ProcessSection';
 import BrandStorySection from '../components/BrandStorySection';
+import NewsSection, { DEFAULT_ARTICLES } from '../components/NewsSection';
 import TestimonialsSection from '../components/TestimonialsSection';
+import CompanyModal from '../components/CompanyModal';
+import NewsModal from '../components/NewsModal';
 import Footer from '../components/Footer';
 
 // ============================================================
@@ -76,7 +79,7 @@ const DEFAULT_BRAND_STORY = {
 const DEFAULT_TESTIMONIALS = [
   {
     _id: '1',
-    comment: 'Rượu thơm, êm, dễ uống.\nRất thích hợp làm quà biếu.',
+    comment: 'Rượu thơm, êm, dễ uống. Rất thích hợp làm quà biếu.',
     customerName: 'Anh Minh Tuấn',
     location: 'Hà Nội',
     rating: 5,
@@ -119,9 +122,13 @@ export default function HomePage() {
     process: DEFAULT_PROCESS_SECTION,
     steps: DEFAULT_STEPS,
     brandStory: DEFAULT_BRAND_STORY,
+    news: DEFAULT_ARTICLES,
     testimonials: DEFAULT_TESTIMONIALS,
     config: DEFAULT_CONFIG,
   });
+
+  const [companyModalOpen, setCompanyModalOpen] = useState(false);
+  const [selectedArticle, setSelectedArticle] = useState(null);
 
   // Fetch từ API — nếu thành công thì override static data
   useEffect(() => {
@@ -147,6 +154,7 @@ export default function HomePage() {
           process: processData.status === 'fulfilled' ? processData.value.data.data?.section || prev.process : prev.process,
           steps: processData.status === 'fulfilled' && processData.value.data.data?.steps?.length ? processData.value.data.data.steps : prev.steps,
           brandStory: brandStory.status === 'fulfilled' && brandStory.value.data.data ? brandStory.value.data.data : prev.brandStory,
+          news: prev.news,
           testimonials: testimonials.status === 'fulfilled' && testimonials.value.data.data?.length ? testimonials.value.data.data : prev.testimonials,
           config: config.status === 'fulfilled' && config.value.data.data ? config.value.data.data : prev.config,
         }));
@@ -168,13 +176,36 @@ export default function HomePage() {
       <main>
         <HeroSection data={data.hero} />
         <UspBar features={data.usp} />
-        <SplitSection intro={data.intro} products={data.products} />
+        <SplitSection
+          intro={data.intro}
+          products={data.products}
+          onOpenAbout={() => setCompanyModalOpen(true)}
+        />
         <ProcessSection section={data.process} steps={data.steps} />
-        <BrandStorySection data={data.brandStory} />
+        <BrandStorySection
+          data={data.brandStory}
+          onOpenCompanyModal={() => setCompanyModalOpen(true)}
+        />
+        <NewsSection
+          articles={data.news}
+          onSelectArticle={(article) => setSelectedArticle(article)}
+        />
         <TestimonialsSection testimonials={data.testimonials} />
       </main>
 
       <Footer config={data.config} />
+
+      {/* Popups */}
+      <CompanyModal
+        isOpen={companyModalOpen}
+        onClose={() => setCompanyModalOpen(false)}
+        config={data.config}
+      />
+
+      <NewsModal
+        article={selectedArticle}
+        onClose={() => setSelectedArticle(null)}
+      />
     </>
   );
 }

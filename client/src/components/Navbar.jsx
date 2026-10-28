@@ -17,16 +17,34 @@ const LOGO = '/assets/logo.jpg';
 export default function Navbar({ hotline = '0866.603.589' }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('#hero');
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 60);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 60);
+
+      // ScrollSpy to highlight the right nav item
+      const sections = ['#hero', '#san-pham', '#quy-trinh', '#gioi-thieu', '#tin-tuc', '#lien-he'];
+      const scrollPos = window.scrollY + 180;
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const el = document.querySelector(sections[i]);
+        if (el && el.offsetTop <= scrollPos) {
+          setActiveSection(sections[i]);
+          break;
+        }
+      }
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleNav = (e, href) => {
     e.preventDefault();
     setMobileOpen(false);
+    setActiveSection(href);
     if (href.startsWith('#')) {
       const el = document.querySelector(href);
       if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -45,12 +63,12 @@ export default function Navbar({ hotline = '0866.603.589' }) {
 
             {/* Desktop Nav */}
             <ul className="navbar-nav">
-              {NAV_LINKS.map((link, idx) => (
+              {NAV_LINKS.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
                     onClick={(e) => handleNav(e, link.href)}
-                    className={idx === 0 ? 'active' : ''}
+                    className={activeSection === link.href ? 'active' : ''}
                   >
                     {link.label}
                   </a>

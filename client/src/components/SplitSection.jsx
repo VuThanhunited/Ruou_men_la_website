@@ -2,11 +2,11 @@ import { FiArrowRight } from 'react-icons/fi';
 
 const DIVIDER_SVG = '/assets/divider.svg';
 
-export default function SplitSection({ intro, products = [] }) {
+export default function SplitSection({ intro, products = [], onOpenAbout }) {
   return (
     <section className="split-section" id="san-pham">
       {/* LEFT: Intro banner xanh đậm */}
-      <div className="intro-banner" id="gioi-thieu">
+      <div className="intro-banner">
         {intro?.introBgUrl ? (
           <div
             className="intro-banner-bg"
@@ -30,19 +30,19 @@ export default function SplitSection({ intro, products = [] }) {
             {intro?.description || 'Rượu Men Lá Yến Nhi là sự kết hợp hài hòa giữa bí quyết dân gian và nguồn nguyên liệu thiên nhiên, mang đến hương vị độc đáo, đậm đà bản sắc quê hương.'}
           </p>
 
-          <a
-            href={intro?.buttonLink || '#'}
+          <button
+            type="button"
             className="btn btn-outline-light"
-            onClick={(e) => {
-              const link = intro?.buttonLink || '#gioi-thieu';
-              if (link.startsWith('#')) {
-                e.preventDefault();
-                document.querySelector(link)?.scrollIntoView({ behavior: 'smooth' });
+            onClick={() => {
+              if (onOpenAbout) {
+                onOpenAbout();
+              } else {
+                document.querySelector('#gioi-thieu')?.scrollIntoView({ behavior: 'smooth' });
               }
             }}
           >
             {intro?.buttonText || 'TÌM HIỂU NGAY'} <FiArrowRight />
-          </a>
+          </button>
         </div>
       </div>
 
