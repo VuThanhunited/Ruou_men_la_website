@@ -10,12 +10,39 @@ const {
   News,
   Testimonial,
   SiteConfig,
+  Subscriber,
 } = require('../models/Content');
+
+const DEFAULT_THEME = {
+  preset: 'forest',
+  primaryColor: '#1C3319',
+  primaryDarkColor: '#122210',
+  primaryLightColor: '#2D5229',
+  accentGoldColor: '#C59B5F',
+  accentBrownColor: '#8C5A2B',
+  bgColor: '#F4EFE6',
+  bgAltColor: '#FAF6F0',
+  textDarkColor: '#1E271D',
+  textLightColor: '#F5EFE0',
+  fontScript: "'Dancing Script', cursive",
+  fontSerif: "'Lora', 'Playfair Display', Georgia, serif",
+  fontSans: "'Be Vietnam Pro', 'Montserrat', sans-serif",
+  heroOverlayOpacity: 85,
+  storyOverlayOpacity: 88,
+  showUsp: true,
+  showIntro: true,
+  showProducts: true,
+  showProcess: true,
+  showBrandStory: true,
+  showNews: true,
+  showTestimonials: true,
+  sectionOrder: ['usp', 'split', 'process', 'brandStory', 'news', 'testimonials'],
+};
 
 const seed = async () => {
   console.log('🌱 Bắt đầu kiểm tra & seed dữ liệu mẫu...');
 
-  // Admin
+  // 1. Admin
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@ruoumenla.vn';
   const adminExists = await Admin.findOne({ email: adminEmail });
   if (!adminExists) {
@@ -23,16 +50,18 @@ const seed = async () => {
       email: adminEmail,
       password: process.env.ADMIN_PASSWORD || 'Admin@123456',
       name: 'Admin Yến Nhi',
+      role: 'admin',
     });
     console.log('✅ Admin account created');
   }
 
-  // Hero
+  // 2. Hero
   let hero = await Hero.findOne();
   if (!hero) {
     await Hero.create({
       logoUrl: '/assets/logo.jpg',
       heroBgUrl: '/assets/hero-bg.jpg',
+      heroProductUrl: '',
       title: 'Rượu\nMen Lá',
       subtitle: 'Hương vị truyền thống từ núi rừng quê hương',
       description:
@@ -41,16 +70,19 @@ const seed = async () => {
       ctaLink: '#san-pham',
       hotline: '0372.477.078',
       sideBannerText: 'Rượu\nsạch từ\nthiên nhiên',
+      sideBannerBgUrl: '',
     });
     console.log('✅ Hero data seeded');
   } else {
     let changed = false;
     if (!hero.logoUrl) { hero.logoUrl = '/assets/logo.jpg'; changed = true; }
     if (!hero.heroBgUrl) { hero.heroBgUrl = '/assets/hero-bg.jpg'; changed = true; }
+    if (hero.heroProductUrl === undefined) { hero.heroProductUrl = ''; changed = true; }
+    if (hero.sideBannerBgUrl === undefined) { hero.sideBannerBgUrl = ''; changed = true; }
     if (changed) await hero.save();
   }
 
-  // USP Features
+  // 3. USP Features
   const defaultUspIcons = [
     '/assets/icons/usp-nature.svg',
     '/assets/icons/usp-craft.svg',
@@ -61,23 +93,29 @@ const seed = async () => {
   const uspList = await UspFeature.find().sort('order');
   if (uspList.length === 0) {
     await UspFeature.insertMany([
-      { iconUrl: defaultUspIcons[0], title: 'Nguyên liệu thiên nhiên', subTitle: 'Men lá rừng truyền thống', order: 1 },
-      { iconUrl: defaultUspIcons[1], title: 'Ủ thủ công truyền thống', subTitle: 'Giữ trọn hương vị cổ truyền', order: 2 },
-      { iconUrl: defaultUspIcons[2], title: 'An toàn cho sức khỏe', subTitle: 'Không hóa chất, không phụ gia', order: 3 },
-      { iconUrl: defaultUspIcons[3], title: 'Hương vị đặc trưng', subTitle: 'Êm, thơm, đậm đà', order: 4 },
-      { iconUrl: defaultUspIcons[4], title: 'Quà tặng ý nghĩa', subTitle: 'Cho người thân, đối tác', order: 5 },
+      { iconUrl: defaultUspIcons[0], title: 'Nguyên liệu thiên nhiên', subTitle: 'Men lá rừng truyền thống', order: 1, isActive: true },
+      { iconUrl: defaultUspIcons[1], title: 'Ủ thủ công truyền thống', subTitle: 'Giữ trọn hương vị cổ truyền', order: 2, isActive: true },
+      { iconUrl: defaultUspIcons[2], title: 'An toàn cho sức khỏe', subTitle: 'Không hóa chất, không phụ gia', order: 3, isActive: true },
+      { iconUrl: defaultUspIcons[3], title: 'Hương vị đặc trưng', subTitle: 'Êm, thơm, đậm đà', order: 4, isActive: true },
+      { iconUrl: defaultUspIcons[4], title: 'Quà tặng ý nghĩa', subTitle: 'Cho người thân, đối tác', order: 5, isActive: true },
     ]);
     console.log('✅ USP Features seeded');
   } else {
     for (let i = 0; i < uspList.length; i++) {
+      let changed = false;
       if (!uspList[i].iconUrl && defaultUspIcons[i]) {
         uspList[i].iconUrl = defaultUspIcons[i];
-        await uspList[i].save();
+        changed = true;
       }
+      if (uspList[i].isActive === undefined) {
+        uspList[i].isActive = true;
+        changed = true;
+      }
+      if (changed) await uspList[i].save();
     }
   }
 
-  // Intro
+  // 4. Intro
   let intro = await Intro.findOne();
   if (!intro) {
     await Intro.create({
@@ -94,58 +132,78 @@ const seed = async () => {
     await intro.save();
   }
 
-  // Products
-  const defaultProductImgs = ['/assets/product-1.jpg', '/assets/product-2.jpg', '/assets/product-3.jpg'];
+  // 5. Products
+  const defaultProducts = [
+    {
+      thumbnailUrl: '/assets/product-1.jpg',
+      name: 'Rượu Men Lá Truyền Thống',
+      volume: '500ml',
+      description: 'Rượu men lá truyền thống, hương vị đậm đà, nguyên liệu tự nhiên 100%.',
+      price: 180000,
+      ingredients: 'Gạo nếp nương, men lá 20+ vị thuốc thảo dược rừng',
+      method: 'Ủ chum sành hạ thổ truyền thống 6 tháng',
+      alcoholContent: '~ 29° - 30° Vol (Êm dịu, ngọt hậu)',
+      origin: 'HTX Dịch Vụ Thương Mại Yến Nhi - Bắc Ninh',
+      badge: 'Ủ CHUM SÀNH TRUYỀN THỐNG',
+      isFeatured: true,
+      isActive: true,
+      order: 1,
+      slug: 'ruou-men-la-truyen-thong',
+    },
+    {
+      thumbnailUrl: '/assets/product-2.jpg',
+      name: 'Rượu Men Lá Đặc Biệt',
+      volume: '750ml',
+      description: 'Phiên bản đặc biệt, ủ lâu hơn, hương vị tinh tế và phong phú hơn.',
+      price: 280000,
+      ingredients: 'Nếp cái hoa vàng tuyển chọn, men lá rừng thượng hạng',
+      method: 'Chưng cất nồi đồng & ủ chum sành hạ thổ 12 tháng',
+      alcoholContent: '~ 30° - 32° Vol (Đậm đà, thơm sâu)',
+      origin: 'HTX Dịch Vụ Thương Mại Yến Nhi - Bắc Ninh',
+      badge: 'PHIÊN BẢN THƯỢNG HẠNG',
+      isFeatured: true,
+      isActive: true,
+      order: 2,
+      slug: 'ruou-men-la-dac-biet',
+    },
+    {
+      thumbnailUrl: '/assets/product-3.jpg',
+      name: 'Rượu Men Lá Quà Tặng',
+      volume: 'Hộp 2 chai',
+      description: 'Hộp quà sang trọng gồm 2 chai, phù hợp làm quà biếu tặng dịp lễ, Tết.',
+      price: 420000,
+      ingredients: 'Gạo nếp nương, men lá 20+ vị thảo dược quý hiếm',
+      method: 'Ủ chum sành hạ thổ lâu năm, đóng hộp quà cao cấp',
+      alcoholContent: '~ 30° Vol (Êm say vừa vặn)',
+      origin: 'HTX Dịch Vụ Thương Mại Yến Nhi - Bắc Ninh',
+      badge: 'QUÀ BIẾU SANG TRỌNG',
+      isFeatured: true,
+      isActive: true,
+      order: 3,
+      slug: 'ruou-men-la-qua-tang',
+    },
+  ];
   const products = await Product.find().sort('order');
   if (products.length === 0) {
-    await Product.insertMany([
-      {
-        thumbnailUrl: '/assets/product-1.jpg',
-        name: 'Rượu Men Lá Truyền Thống',
-        volume: '500ml',
-        description: 'Rượu men lá truyền thống, hương vị đậm đà, nguyên liệu tự nhiên 100%.',
-        price: 180000,
-        isFeatured: true,
-        isActive: true,
-        order: 1,
-        slug: 'ruou-men-la-truyen-thong',
-      },
-      {
-        thumbnailUrl: '/assets/product-2.jpg',
-        name: 'Rượu Men Lá Đặc Biệt',
-        volume: '750ml',
-        description: 'Phiên bản đặc biệt, ủ lâu hơn, hương vị tinh tế và phong phú hơn.',
-        price: 280000,
-        isFeatured: true,
-        isActive: true,
-        order: 2,
-        slug: 'ruou-men-la-dac-biet',
-      },
-      {
-        thumbnailUrl: '/assets/product-3.jpg',
-        name: 'Rượu Men Lá Quà Tặng',
-        volume: 'Hộp 2 chai',
-        description: 'Hộp quà sang trọng gồm 2 chai, phù hợp làm quà biếu tặng dịp lễ, Tết.',
-        price: 420000,
-        isFeatured: true,
-        isActive: true,
-        order: 3,
-        slug: 'ruou-men-la-qua-tang',
-      },
-    ]);
+    await Product.insertMany(defaultProducts);
     console.log('✅ Products seeded');
   } else {
     for (let i = 0; i < products.length; i++) {
-      if (!products[i].thumbnailUrl && defaultProductImgs[i]) {
-        products[i].thumbnailUrl = defaultProductImgs[i];
-        await products[i].save();
-      }
+      const def = defaultProducts[i] || defaultProducts[0];
+      let changed = false;
+      if (!products[i].thumbnailUrl) { products[i].thumbnailUrl = def.thumbnailUrl; changed = true; }
+      if (!products[i].ingredients) { products[i].ingredients = def.ingredients; changed = true; }
+      if (!products[i].method) { products[i].method = def.method; changed = true; }
+      if (!products[i].alcoholContent) { products[i].alcoholContent = def.alcoholContent; changed = true; }
+      if (!products[i].origin) { products[i].origin = def.origin; changed = true; }
+      if (!products[i].badge) { products[i].badge = def.badge; changed = true; }
+      if (changed) await products[i].save();
     }
   }
 
-  // Process
-  const processExists = await Process.findOne();
-  if (!processExists) {
+  // 6. Process & Process Steps
+  let processDoc = await Process.findOne();
+  if (!processDoc) {
     await Process.create({
       sectionTitle: 'QUY TRÌNH SẢN XUẤT',
       sectionSubtitle: 'Giữ trọn hương vị tự nhiên',
@@ -153,7 +211,12 @@ const seed = async () => {
         'Rượu Men Lá Yến Nhi được làm từ gạo nếp chọn lọc, men lá rừng truyền thống, ủ thủ công theo bí quyết dân gian, đảm bảo hương vị thuần khiết và an toàn cho sức khỏe.',
       buttonText: 'XEM CHI TIẾT QUY TRÌNH',
       buttonLink: '#quy-trinh',
+      decorBgUrl: '',
     });
+    console.log('✅ Process section seeded');
+  } else if (processDoc.decorBgUrl === undefined) {
+    processDoc.decorBgUrl = '';
+    await processDoc.save();
   }
 
   const defaultStepData = [
@@ -170,6 +233,7 @@ const seed = async () => {
         'Sơ chế kỹ lưỡng: Gạo được ngâm và vo sạch bằng nước suối trong, loại bỏ hoàn toàn hạt lép và tạp chất trước khi đưa vào chõ gỗ đồ chín.',
       ],
       secret: 'Chỉ sử dụng nếp nương gieo trồng tự nhiên trên nương rẫy, tuyệt đối không dùng gạo pha tạp chất hay chất kích thích.',
+      isActive: true,
     },
     {
       stepNumber: 2,
@@ -184,6 +248,7 @@ const seed = async () => {
         'Nặn bánh men thủ công: Bột thảo dược được nhào kỹ cùng bột gạo nếp, nặn thành từng bánh men tròn đều tay và ủ trong lớp rơm nếp khô sạch để men sinh sôi tự nhiên.',
       ],
       secret: 'Men lá giúp phân giải hoàn toàn các chất độc hại, làm rượu uống êm ru, ấm tỳ vị, lưu thông khí huyết và không bao giờ gây đau đầu hay khô cổ.',
+      isActive: true,
     },
     {
       stepNumber: 3,
@@ -198,6 +263,7 @@ const seed = async () => {
         'Chum sành không tráng men: Chuyển toàn bộ bỗng rượu vào các chum gốm nung mộc tự nhiên giúp rượu thẩm thấu oxy và làm mềm giọt rượu.',
       ],
       secret: 'Rượu được hạ thổ hoặc ủ chum sành tối thiểu từ 6 đến 12 tháng, giúp đào thải triệt để độc tố Andehit và Methanol.',
+      isActive: true,
     },
     {
       stepNumber: 4,
@@ -212,6 +278,7 @@ const seed = async () => {
         'Đóng chai & khử trùng: Đóng trong chai thủy tinh dày dặn hoặc nậm gốm đã qua khử trùng nhiệt độ cao, dán tem nhãn niêm phong chính hãng HTX Yến Nhi.',
       ],
       secret: 'Mỗi mẻ rượu xuất xưởng đều được đo nồng độ và kiểm nghiệm an toàn thực phẩm, đảm bảo chỉ số Methanol luôn ở mức an toàn.',
+      isActive: true,
     },
   ];
 
@@ -229,12 +296,13 @@ const seed = async () => {
         if (!steps[i].lead) { steps[i].lead = def.lead; changed = true; }
         if (!steps[i].details?.length) { steps[i].details = def.details; changed = true; }
         if (!steps[i].secret) { steps[i].secret = def.secret; changed = true; }
+        if (steps[i].isActive === undefined) { steps[i].isActive = true; changed = true; }
         if (changed) await steps[i].save();
       }
     }
   }
 
-  // Brand Story
+  // 7. Brand Story
   let story = await BrandStory.findOne();
   if (!story) {
     await BrandStory.create({
@@ -252,7 +320,7 @@ const seed = async () => {
     await story.save();
   }
 
-  // News
+  // 8. News
   const newsCount = await News.countDocuments();
   if (newsCount === 0) {
     await News.insertMany([
@@ -311,7 +379,7 @@ const seed = async () => {
     console.log('✅ News articles seeded');
   }
 
-  // Testimonials
+  // 9. Testimonials
   const defaultAvatars = ['/assets/avatar-1.jpg', '/assets/avatar-2.jpg', '/assets/avatar-3.jpg'];
   const testimonials = await Testimonial.find().sort('order');
   if (testimonials.length === 0) {
@@ -322,6 +390,7 @@ const seed = async () => {
         customerName: 'Anh Minh Tuấn',
         location: 'Hà Nội',
         rating: 5,
+        isActive: true,
         order: 1,
       },
       {
@@ -330,6 +399,7 @@ const seed = async () => {
         customerName: 'Chị Thu Hương',
         location: 'Bắc Ninh',
         rating: 5,
+        isActive: true,
         order: 2,
       },
       {
@@ -338,20 +408,27 @@ const seed = async () => {
         customerName: 'Anh Quốc Bảo',
         location: 'Hải Phòng',
         rating: 5,
+        isActive: true,
         order: 3,
       },
     ]);
     console.log('✅ Testimonials seeded');
   } else {
     for (let i = 0; i < testimonials.length; i++) {
+      let changed = false;
       if (!testimonials[i].avatarUrl && defaultAvatars[i]) {
         testimonials[i].avatarUrl = defaultAvatars[i];
-        await testimonials[i].save();
+        changed = true;
       }
+      if (testimonials[i].isActive === undefined) {
+        testimonials[i].isActive = true;
+        changed = true;
+      }
+      if (changed) await testimonials[i].save();
     }
   }
 
-  // Site Config
+  // 10. Site Config & Theme
   let config = await SiteConfig.findOne();
   if (!config) {
     await SiteConfig.create({
@@ -359,16 +436,63 @@ const seed = async () => {
       companyName: 'Hợp Tác Xã Dịch Vụ Thương Mại Yến Nhi',
       address: 'Thôn Tân Đồng, Xã Nam Dương, Thành Phố Bắc Ninh',
       phone1: '0372.477.078',
+      phone2: '0988.477.078',
       email: 'yen.nhi.ruoumenla@gmail.com',
+      facebookUrl: 'https://facebook.com/ruoumenlayennhi',
+      instagramUrl: 'https://instagram.com/ruoumenlayennhi',
+      youtubeUrl: 'https://youtube.com/@ruoumenlayennhi',
+      tiktokUrl: 'https://tiktok.com/@ruoumenlayennhi',
+      zaloUrl: 'https://zalo.me/0372477078',
       metaTitle: 'Rượu Men Lá Yến Nhi - Hương vị truyền thống từ núi rừng',
+      metaDescription:
+        'Rượu Men Lá Yến Nhi - Sản phẩm rượu truyền thống từ men lá rừng, nguyên liệu thiên nhiên, an toàn sức khỏe, hương vị đặc trưng.',
+      theme: DEFAULT_THEME,
     });
     console.log('✅ Site Config seeded');
-  } else if (!config.footerLogoUrl) {
-    config.footerLogoUrl = '/assets/logo.jpg';
-    await config.save();
+  } else {
+    let changed = false;
+    if (!config.footerLogoUrl) { config.footerLogoUrl = '/assets/logo.jpg'; changed = true; }
+    if (!config.phone2) { config.phone2 = '0988.477.078'; changed = true; }
+    if (!config.facebookUrl || config.facebookUrl === '#') { config.facebookUrl = 'https://facebook.com/ruoumenlayennhi'; changed = true; }
+    if (!config.instagramUrl || config.instagramUrl === '#') { config.instagramUrl = 'https://instagram.com/ruoumenlayennhi'; changed = true; }
+    if (!config.youtubeUrl || config.youtubeUrl === '#') { config.youtubeUrl = 'https://youtube.com/@ruoumenlayennhi'; changed = true; }
+    if (!config.tiktokUrl || config.tiktokUrl === '#') { config.tiktokUrl = 'https://tiktok.com/@ruoumenlayennhi'; changed = true; }
+    if (!config.zaloUrl || config.zaloUrl === '#') { config.zaloUrl = 'https://zalo.me/0372477078'; changed = true; }
+    if (!config.metaDescription) {
+      config.metaDescription =
+        'Rượu Men Lá Yến Nhi - Sản phẩm rượu truyền thống từ men lá rừng, nguyên liệu thiên nhiên, an toàn sức khỏe, hương vị đặc trưng.';
+      changed = true;
+    }
+    if (!config.theme || !config.theme.primaryColor) {
+      config.theme = { ...DEFAULT_THEME, ...(config.theme ? config.theme.toObject?.() || config.theme : {}) };
+      changed = true;
+    }
+    if (changed) await config.save();
+  }
+
+  // 11. Subscribers (mẫu để collection subscribers có đầy đủ trường dữ liệu)
+  const subCount = await Subscriber.countDocuments();
+  if (subCount === 0) {
+    await Subscriber.insertMany([
+      { email: 'khachhang1@gmail.com', isActive: true },
+      { email: 'doitac.yennhi@gmail.com', isActive: true },
+    ]);
+    console.log('✅ Sample Subscribers seeded');
   }
 
   console.log('🎉 Seed hoàn tất!');
 };
+
+if (require.main === module) {
+  require('dotenv').config();
+  const connectDB = require('../config/db');
+  connectDB()
+    .then(() => seed())
+    .then(() => process.exit(0))
+    .catch((err) => {
+      console.error('❌ Seed error:', err);
+      process.exit(1);
+    });
+}
 
 module.exports = seed;

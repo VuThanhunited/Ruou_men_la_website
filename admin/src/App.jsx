@@ -29,9 +29,11 @@ export default function App() {
       <Routes>
         {/* Auth */}
         <Route path="/login" element={<AdminLoginPage />} />
+        <Route path="/admin/login" element={<Navigate to="/login" replace />} />
 
         {/* Redirect gốc về dashboard */}
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/admin" element={<Navigate to="/dashboard" replace />} />
 
         {/* Protected admin routes */}
         <Route path="/dashboard"    element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />

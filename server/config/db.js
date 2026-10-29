@@ -11,9 +11,10 @@ try {
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      serverSelectionTimeoutMS: 5000,
+      dbName: 'ruou-men-la',
+      serverSelectionTimeoutMS: 20000,
     });
-    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+    console.log(`✅ MongoDB Connected: ${conn.connection.host} (DB: ${conn.connection.name})`);
     return true;
   } catch (error) {
     console.warn(`⚠️ Không kết nối được MongoDB (${error.message}).`);

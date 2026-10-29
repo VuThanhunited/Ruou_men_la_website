@@ -7,7 +7,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        {/* Các route khác của landing page sẽ thêm vào đây nếu cần */}
+        <Route path="*" element={<HomePage />} />
       </Routes>
     </BrowserRouter>
   );
