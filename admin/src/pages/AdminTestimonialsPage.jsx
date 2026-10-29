@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { FiPlus, FiEdit2, FiTrash2, FiSave, FiX } from 'react-icons/fi';
 import { AiFillStar } from 'react-icons/ai';
@@ -48,7 +48,11 @@ export default function AdminTestimonialsPage() {
     try {
       const fd = new FormData();
       Object.entries(form).forEach(([k, v]) => fd.append(k, v));
-      if (croppedFile) fd.append('avatarUrl', croppedFile);
+      if (croppedFile) {
+        fd.append('avatarUrl', croppedFile);
+      } else {
+        fd.append('avatarUrl', croppedPreview);
+      }
       if (editItem) {
         await api.put(`/admin/testimonials/${editItem._id}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
         toast.success('✅ Đã cập nhật đánh giá');

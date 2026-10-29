@@ -40,3 +40,7 @@ Thumbs.db
 /client/*.png
 /admin/*.png
 /server/*.png
+
+# Local runtime data & uploads
+server/data/
+server/uploads/

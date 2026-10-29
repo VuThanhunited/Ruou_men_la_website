@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { FiX, FiPhone, FiCheck, FiShoppingBag, FiShield, FiAward, FiTruck } from 'react-icons/fi';
+import { FiX, FiPhone, FiShoppingBag, FiShield, FiAward, FiTruck } from 'react-icons/fi';
 import '../styles/ProductDetailModal.css';
 
-export default function ProductDetailModal({ product, isOpen, onClose, onOrderNow, hotline = '0372.477.078' }) {
+export default function ProductDetailModal({
+  product,
+  isOpen,
+  onClose,
+  onOrderNow,
+  hotline = '0372.477.078',
+}) {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
@@ -43,7 +49,6 @@ export default function ProductDetailModal({ product, isOpen, onClose, onOrderNo
         role="dialog"
         aria-modal="true"
       >
-        {/* Nút đóng */}
         <button className="product-modal-close" onClick={onClose} aria-label="Đóng popup">
           <FiX size={20} />
         </button>
@@ -57,10 +62,11 @@ export default function ProductDetailModal({ product, isOpen, onClose, onOrderNo
               ) : (
                 <div className="product-modal-placeholder">🏺</div>
               )}
-              <span className="product-modal-badge">Ủ CHUM SÀNH TRUYỀN THỐNG</span>
+              <span className="product-modal-badge">
+                {product.badge || 'Ủ CHUM SÀNH TRUYỀN THỐNG'}
+              </span>
             </div>
 
-            {/* Cam kết nhỏ dưới ảnh */}
             <div className="product-modal-assurances">
               <div className="assurance-item">
                 <FiShield className="assurance-icon" />
@@ -103,27 +109,33 @@ export default function ProductDetailModal({ product, isOpen, onClose, onOrderNo
               </p>
             </div>
 
-            {/* Đặc tính nổi bật */}
             <div className="product-modal-specs">
               <div className="spec-row">
                 <span className="spec-name">🌾 Nguyên liệu:</span>
-                <span className="spec-val">Gạo nếp nương, men lá 20+ vị thuốc thảo dược rừng</span>
+                <span className="spec-val">
+                  {product.ingredients || 'Gạo nếp nương, men lá 20+ vị thuốc thảo dược rừng'}
+                </span>
               </div>
               <div className="spec-row">
                 <span className="spec-name">🏺 Phương pháp:</span>
-                <span className="spec-val">Ủ chum sành hạ thổ truyền thống</span>
+                <span className="spec-val">
+                  {product.method || 'Ủ chum sành hạ thổ truyền thống'}
+                </span>
               </div>
               <div className="spec-row">
                 <span className="spec-name">💧 Nồng độ:</span>
-                <span className="spec-val">~ 29° - 32° Vol (Êm say vừa vặn)</span>
+                <span className="spec-val">
+                  {product.alcoholContent || '~ 29° - 32° Vol (Êm say vừa vặn)'}
+                </span>
               </div>
               <div className="spec-row">
                 <span className="spec-name">🏡 Xuất xứ:</span>
-                <span className="spec-val">HTX Dịch Vụ Thương Mại Yến Nhi - Bắc Ninh</span>
+                <span className="spec-val">
+                  {product.origin || 'HTX Dịch Vụ Thương Mại Yến Nhi - Bắc Ninh'}
+                </span>
               </div>
             </div>
 
-            {/* Chọn số lượng */}
             <div className="product-modal-qty-row">
               <span className="qty-label">Số lượng:</span>
               <div className="qty-picker">
@@ -145,7 +157,6 @@ export default function ProductDetailModal({ product, isOpen, onClose, onOrderNo
               </div>
             </div>
 
-            {/* Nút hành động */}
             <div className="product-modal-actions">
               <button
                 type="button"

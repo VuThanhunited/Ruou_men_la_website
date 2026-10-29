@@ -4,7 +4,7 @@ const ctrl = require('../controllers/contentController');
 const { protect } = require('../middleware/auth');
 const { upload } = require('../config/cloudinary');
 
-// Middleware gán folder Cloudinary
+// Middleware gán folder upload
 const setFolder = (folder) => (req, res, next) => {
   req.uploadFolder = `ruou-men-la/${folder}`;
   next();
@@ -20,6 +20,7 @@ router.get('/products', ctrl.getProducts);
 router.get('/products/:id', ctrl.getProduct);
 router.get('/process', ctrl.getProcess);
 router.get('/brand-story', ctrl.getBrandStory);
+router.get('/news', ctrl.getNews);
 router.get('/testimonials', ctrl.getTestimonials);
 router.get('/site-config', ctrl.getSiteConfig);
 router.post('/subscribe', ctrl.subscribe);
@@ -76,14 +77,21 @@ router.delete('/admin/process/steps/:id', protect, ctrl.deleteProcessStep);
 // Brand Story
 router.put('/admin/brand-story', protect, setFolder('brand-story'), upload.single('storyBgUrl'), ctrl.updateBrandStory);
 
+// News / Articles
+router.get('/admin/news', protect, ctrl.getAllNews);
+router.post('/admin/news', protect, setFolder('news'), upload.single('imageUrl'), ctrl.createNews);
+router.put('/admin/news/:id', protect, setFolder('news'), upload.single('imageUrl'), ctrl.updateNews);
+router.delete('/admin/news/:id', protect, ctrl.deleteNews);
+
 // Testimonials
 router.get('/admin/testimonials', protect, ctrl.getAllTestimonials);
 router.post('/admin/testimonials', protect, setFolder('testimonials'), upload.single('avatarUrl'), ctrl.createTestimonial);
 router.put('/admin/testimonials/:id', protect, setFolder('testimonials'), upload.single('avatarUrl'), ctrl.updateTestimonial);
 router.delete('/admin/testimonials/:id', protect, ctrl.deleteTestimonial);
 
-// Site Config
+// Site Config & Theme
 router.put('/admin/site-config', protect, setFolder('config'), upload.single('footerLogoUrl'), ctrl.updateSiteConfig);
+router.put('/admin/theme', protect, ctrl.updateTheme);
 
 // Newsletter Subscribers
 router.get('/admin/subscribers', protect, ctrl.getAllSubscribers);

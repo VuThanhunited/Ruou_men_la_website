@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import { FiPhone, FiMenu, FiX } from 'react-icons/fi';
 import '../styles/Navbar.css';
 
@@ -12,18 +11,19 @@ const NAV_LINKS = [
   { label: 'Liên hệ', href: '#lien-he' },
 ];
 
-const LOGO = '/assets/logo.jpg';
+const DEFAULT_LOGO = '/assets/logo.jpg';
 
-export default function Navbar({ hotline = '0372.477.078' }) {
+export default function Navbar({ hotline = '0372.477.078', logoUrl }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('#hero');
+
+  const resolvedLogo = logoUrl || DEFAULT_LOGO;
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 60);
 
-      // ScrollSpy to highlight the right nav item
       const sections = ['#hero', '#san-pham', '#quy-trinh', '#gioi-thieu', '#tin-tuc', '#lien-he'];
       const scrollPos = window.scrollY + 180;
 
@@ -58,7 +58,7 @@ export default function Navbar({ hotline = '0372.477.078' }) {
           <div className="navbar-inner">
             {/* Logo */}
             <a href="#hero" onClick={(e) => handleNav(e, '#hero')} className="navbar-logo">
-              <img src={LOGO} alt="Rượu Men Lá Yến Nhi" />
+              <img src={resolvedLogo} alt="Rượu Men Lá Yến Nhi" />
             </a>
 
             {/* Desktop Nav */}
@@ -103,7 +103,17 @@ export default function Navbar({ hotline = '0372.477.078' }) {
       {mobileOpen && <div className="mobile-overlay" onClick={() => setMobileOpen(false)} />}
       <div className={`mobile-menu ${mobileOpen ? 'open' : ''}`}>
         <div className="mobile-menu-header">
-          <img src={LOGO} alt="Logo" style={{ width: 66, height: 66, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--color-accent-gold)' }} />
+          <img
+            src={resolvedLogo}
+            alt="Logo"
+            style={{
+              width: 66,
+              height: 66,
+              borderRadius: '50%',
+              objectFit: 'cover',
+              border: '2px solid var(--color-accent-gold)',
+            }}
+          />
           <button className="mobile-close" onClick={() => setMobileOpen(false)}>
             <FiX />
           </button>

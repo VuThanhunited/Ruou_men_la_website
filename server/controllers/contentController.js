@@ -6,17 +6,39 @@ const {
   Process,
   ProcessStep,
   BrandStory,
+  News,
   Testimonial,
   SiteConfig,
   Subscriber,
 } = require('../models/Content');
-const { cloudinary } = require('../config/cloudinary');
 
 // Helper: lấy dữ liệu singleton hoặc tạo mới nếu chưa có
 const getSingleton = async (Model) => {
   let doc = await Model.findOne();
   if (!doc) doc = await Model.create({});
   return doc;
+};
+
+// Helper: parse mảng chuỗi từ FormData hoặc JSON
+const parseStringArray = (val) => {
+  if (Array.isArray(val)) return val.filter(Boolean);
+  if (typeof val === 'string') {
+    const trimmed = val.trim();
+    if (!trimmed) return [];
+    if (trimmed.startsWith('[')) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed)) return parsed.filter(Boolean);
+      } catch {
+        // fallback xuống split newline
+      }
+    }
+    return trimmed
+      .split('\n')
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
+  return undefined;
 };
 
 // ============================================================
@@ -42,6 +64,16 @@ exports.updateHero = async (req, res) => {
   } else {
     doc = await Hero.findByIdAndUpdate(doc._id, updateData, { new: true, runValidators: true });
   }
+
+  // Đồng bộ logo sang SiteConfig nếu người dùng đổi logo tại Hero
+  if (updateData.logoUrl) {
+    const siteConfig = await SiteConfig.findOne();
+    if (siteConfig) {
+      siteConfig.footerLogoUrl = updateData.logoUrl;
+      await siteConfig.save();
+    }
+  }
+
   res.json({ success: true, data: doc });
 };
 
@@ -126,15 +158,18 @@ exports.getProduct = async (req, res) => {
 exports.createProduct = async (req, res) => {
   const updateData = { ...req.body };
   if (req.file) updateData.thumbnailUrl = req.file.path;
-  // Tự động tạo slug từ tên
   if (updateData.name && !updateData.slug) {
-    updateData.slug = updateData.name
-      .toLowerCase()
-      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-      .replace(/đ/g, 'd')
-      .replace(/[^a-z0-9\s]/g, '')
-      .trim()
-      .replace(/\s+/g, '-');
+    updateData.slug =
+      updateData.name
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/[^a-z0-9\s]/g, '')
+        .trim()
+        .replace(/\s+/g, '-') +
+      '-' +
+      Date.now().toString().slice(-4);
   }
   const data = await Product.create(updateData);
   res.status(201).json({ success: true, data });
@@ -186,6 +221,9 @@ exports.getAllProcessSteps = async (req, res) => {
 exports.createProcessStep = async (req, res) => {
   const updateData = { ...req.body };
   if (req.file) updateData.imageUrl = req.file.path;
+  if (updateData.details !== undefined) {
+    updateData.details = parseStringArray(updateData.details);
+  }
   const data = await ProcessStep.create(updateData);
   res.status(201).json({ success: true, data });
 };
@@ -193,6 +231,9 @@ exports.createProcessStep = async (req, res) => {
 exports.updateProcessStep = async (req, res) => {
   const updateData = { ...req.body };
   if (req.file) updateData.imageUrl = req.file.path;
+  if (updateData.details !== undefined) {
+    updateData.details = parseStringArray(updateData.details);
+  }
   const data = await ProcessStep.findByIdAndUpdate(req.params.id, updateData, {
     new: true,
     runValidators: true,
@@ -225,6 +266,52 @@ exports.updateBrandStory = async (req, res) => {
     doc = await BrandStory.findByIdAndUpdate(doc._id, updateData, { new: true });
   }
   res.json({ success: true, data: doc });
+};
+
+// ============================================================
+// NEWS / ARTICLES
+// ============================================================
+exports.getNews = async (req, res) => {
+  const data = await News.find({ isActive: true }).sort('order -createdAt');
+  res.json({ success: true, data });
+};
+
+exports.getAllNews = async (req, res) => {
+  const data = await News.find().sort('order -createdAt');
+  res.json({ success: true, data });
+};
+
+exports.createNews = async (req, res) => {
+  const updateData = { ...req.body };
+  if (req.file) updateData.imageUrl = req.file.path;
+  if (updateData.content !== undefined) {
+    updateData.content = parseStringArray(updateData.content);
+  }
+  if (!updateData.date) {
+    updateData.date = new Date().toLocaleDateString('vi-VN');
+  }
+  const data = await News.create(updateData);
+  res.status(201).json({ success: true, data });
+};
+
+exports.updateNews = async (req, res) => {
+  const updateData = { ...req.body };
+  if (req.file) updateData.imageUrl = req.file.path;
+  if (updateData.content !== undefined) {
+    updateData.content = parseStringArray(updateData.content);
+  }
+  const data = await News.findByIdAndUpdate(req.params.id, updateData, {
+    new: true,
+    runValidators: true,
+  });
+  if (!data) return res.status(404).json({ success: false, message: 'Không tìm thấy bài viết' });
+  res.json({ success: true, data });
+};
+
+exports.deleteNews = async (req, res) => {
+  const data = await News.findByIdAndDelete(req.params.id);
+  if (!data) return res.status(404).json({ success: false, message: 'Không tìm thấy bài viết' });
+  res.json({ success: true, message: 'Đã xóa bài viết' });
 };
 
 // ============================================================
@@ -265,7 +352,7 @@ exports.deleteTestimonial = async (req, res) => {
 };
 
 // ============================================================
-// SITE CONFIG
+// SITE CONFIG & THEME
 // ============================================================
 exports.getSiteConfig = async (req, res) => {
   const data = await getSingleton(SiteConfig);
@@ -276,11 +363,42 @@ exports.updateSiteConfig = async (req, res) => {
   let doc = await SiteConfig.findOne();
   const updateData = { ...req.body };
   if (req.file) updateData.footerLogoUrl = req.file.path;
+
+  if (typeof updateData.theme === 'string') {
+    try {
+      updateData.theme = JSON.parse(updateData.theme);
+    } catch {
+      delete updateData.theme;
+    }
+  }
+
   if (!doc) {
     doc = await SiteConfig.create(updateData);
   } else {
     doc = await SiteConfig.findByIdAndUpdate(doc._id, updateData, { new: true });
   }
+
+  // Đồng bộ logo sang Hero nếu người dùng đổi logo tại SiteConfig
+  if (updateData.footerLogoUrl) {
+    const hero = await Hero.findOne();
+    if (hero) {
+      hero.logoUrl = updateData.footerLogoUrl;
+      await hero.save();
+    }
+  }
+
+  res.json({ success: true, data: doc });
+};
+
+exports.updateTheme = async (req, res) => {
+  let doc = await getSingleton(SiteConfig);
+  const incomingTheme = req.body.theme || req.body;
+  const mergedTheme = {
+    ...(doc.theme ? doc.theme.toObject?.() || doc.theme : {}),
+    ...incomingTheme,
+  };
+  doc.theme = mergedTheme;
+  await doc.save();
   res.json({ success: true, data: doc });
 };
 
@@ -307,14 +425,16 @@ exports.getAllSubscribers = async (req, res) => {
 // DASHBOARD STATS
 // ============================================================
 exports.getDashboardStats = async (req, res) => {
-  const [products, testimonials, subscribers, processSteps] = await Promise.all([
+  const [products, testimonials, subscribers, processSteps, uspFeatures, news] = await Promise.all([
     Product.countDocuments(),
     Testimonial.countDocuments(),
     Subscriber.countDocuments(),
     ProcessStep.countDocuments(),
+    UspFeature.countDocuments(),
+    News.countDocuments(),
   ]);
   res.json({
     success: true,
-    data: { products, testimonials, subscribers, processSteps },
+    data: { products, testimonials, subscribers, processSteps, uspFeatures, news },
   });
 };

@@ -178,6 +178,146 @@
   background: #dc2626;
 }
 
+/* Quick tools (URL input & Builtin Gallery) */
+.img-crop-quick-tools {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+}
+
+.img-crop-tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--color-text-body);
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.img-crop-tool-btn:hover,
+.img-crop-tool-btn.active {
+  background: rgba(38, 62, 35, 0.08);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.img-crop-url-box {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.img-crop-url-box .admin-form-input {
+  flex: 1;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.8rem;
+}
+
+.img-crop-gallery-box {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 0.5rem;
+  padding: 0.65rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-md);
+  max-height: 210px;
+  overflow-y: auto;
+  margin-top: 0.25rem;
+}
+
+.img-crop-gallery-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-sm);
+  background: white;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.img-crop-gallery-item:hover,
+.img-crop-gallery-item.selected {
+  border-color: var(--color-accent-gold);
+  background: rgba(197, 155, 95, 0.08);
+}
+
+.img-crop-gallery-item img {
+  width: 100%;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 4px;
+  background: #263e23;
+}
+
+.img-crop-gallery-item span {
+  font-size: 0.66rem;
+  color: var(--color-text-body);
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Aspect Ratio Selector Bar in Modal */
+.img-crop-ratio-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.25rem;
+  background: #f9fafb;
+  border-bottom: 1px solid #f3f4f6;
+  flex-wrap: wrap;
+}
+
+.img-crop-ratio-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-right: 0.25rem;
+}
+
+.img-crop-ratio-btn {
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 600;
+  border: 1px solid #e5e7eb;
+  background: white;
+  color: var(--color-text-body);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.img-crop-ratio-btn:hover,
+.img-crop-ratio-btn.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.img-crop-btn.original {
+  background: rgba(197, 155, 95, 0.16);
+  color: var(--color-accent-brown);
+  border: 1px solid rgba(197, 155, 95, 0.4);
+}
+
+.img-crop-btn.original:hover {
+  background: var(--color-accent-gold);
+  color: white;
+}
+
 /* ============================================================
    CROPPER MODAL
    ============================================================ */

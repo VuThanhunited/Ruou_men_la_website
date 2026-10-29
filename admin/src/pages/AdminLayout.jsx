@@ -3,28 +3,31 @@ import {
   FiHome, FiImage, FiStar, FiPackage,
   FiSettings, FiMessageSquare, FiUsers,
   FiLogOut, FiUser, FiCpu, FiAward, FiExternalLink,
+  FiSliders, FiFileText,
 } from 'react-icons/fi';
 import '../styles/Admin.css';
 
 const NAV_ITEMS = [
   { label: 'Dashboard', icon: <FiHome />, path: '/dashboard' },
   {
-    section: 'Nội dung trang',
+    section: 'Giao diện & Hình ảnh',
     items: [
-      { label: 'Hero & Navbar',        icon: <FiImage />,        path: '/hero' },
-      { label: 'Điểm nổi bật (USP)',   icon: <FiAward />,        path: '/usp' },
-      { label: 'Giới thiệu',           icon: <FiUser />,         path: '/intro' },
-      { label: 'Sản phẩm',             icon: <FiPackage />,      path: '/products' },
-      { label: 'Quy trình SX',         icon: <FiCpu />,          path: '/process' },
-      { label: 'Câu chuyện TH',        icon: <FiStar />,         path: '/brand-story' },
-      { label: 'Đánh giá KH',          icon: <FiMessageSquare />, path: '/testimonials' },
+      { label: 'Tùy chỉnh Giao diện', icon: <FiSliders />, path: '/theme' },
+      { label: 'Hero, Banner & Logo', icon: <FiImage />,   path: '/hero' },
+      { label: 'Điểm nổi bật (USP)',  icon: <FiAward />,   path: '/usp' },
+      { label: 'Banner Giới thiệu',   icon: <FiUser />,    path: '/intro' },
+      { label: 'Sản phẩm & Ảnh SP',   icon: <FiPackage />, path: '/products' },
+      { label: 'Quy trình SX',        icon: <FiCpu />,     path: '/process' },
+      { label: 'Câu chuyện TH',       icon: <FiStar />,    path: '/brand-story' },
+      { label: 'Tin tức & Bài viết',  icon: <FiFileText />, path: '/news' },
+      { label: 'Đánh giá KH',         icon: <FiMessageSquare />, path: '/testimonials' },
     ],
   },
   {
-    section: 'Cài đặt',
+    section: 'Cài đặt hệ thống',
     items: [
-      { label: 'Cấu hình chung',  icon: <FiSettings />, path: '/site-config' },
-      { label: 'Subscribers',     icon: <FiUsers />,    path: '/subscribers' },
+      { label: 'Cấu hình & Footer', icon: <FiSettings />, path: '/site-config' },
+      { label: 'Subscribers',       icon: <FiUsers />,    path: '/subscribers' },
     ],
   },
 ];
@@ -52,7 +55,7 @@ export default function AdminLayout({ children, title = 'Dashboard' }) {
           <div className="admin-sidebar-brand-icon">YN</div>
           <div>
             <div className="admin-sidebar-brand-text">Yến Nhi Admin</div>
-            <div className="admin-sidebar-brand-sub">Quản trị nội dung</div>
+            <div className="admin-sidebar-brand-sub">Quản trị giao diện &amp; nội dung</div>
           </div>
         </div>
 
@@ -113,9 +116,10 @@ export default function AdminLayout({ children, title = 'Dashboard' }) {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.25rem',
+                fontWeight: 600,
               }}
             >
-              <FiExternalLink size={12} /> Xem trang web
+              <FiExternalLink size={12} /> Xem trang Client
             </a>
           </div>
         </div>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- Circle Background -->
+  <circle cx="24" cy="24" r="22" fill="#263E23" />
+  <circle cx="24" cy="24" r="21" stroke="#C59B5F" stroke-opacity="0.3" stroke-width="1" />
+  <!-- Two Natural Leaves -->
+  <path d="M15 33C17 26 21 21 31 17C31 27 25 31 18 32" stroke="#F5EFE0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M18 32C19 28 22 25 28 23" stroke="#F5EFE0" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M25 21C26 15 30 13 35 12C35 17 33 21 28 23" stroke="#F5EFE0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

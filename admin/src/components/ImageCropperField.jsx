@@ -1,20 +1,65 @@
-﻿import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import Cropper from 'react-easy-crop';
-import { FiUpload, FiCrop, FiCheck, FiX, FiRotateCw, FiZoomIn } from 'react-icons/fi';
+import {
+  FiUpload,
+  FiCrop,
+  FiCheck,
+  FiX,
+  FiRotateCw,
+  FiZoomIn,
+  FiLink,
+  FiImage,
+} from 'react-icons/fi';
 import './ImageCropper.css';
 
+const createImage = (url) =>
+  new Promise((resolve, reject) => {
+    const image = new Image();
+    image.addEventListener('load', () => resolve(image));
+    image.addEventListener('error', (error) => reject(error));
+    image.setAttribute('crossOrigin', 'anonymous');
+    image.src = url;
+  });
+
+function getRadianAngle(degreeValue) {
+  return (degreeValue * Math.PI) / 180;
+}
+
+function rotateSize(width, height, rotation) {
+  const rotRad = getRadianAngle(rotation);
+  return {
+    width: Math.abs(Math.cos(rotRad) * width) + Math.abs(Math.sin(rotRad) * height),
+    height: Math.abs(Math.sin(rotRad) * width) + Math.abs(Math.cos(rotRad) * height),
+  };
+}
+
 /**
- * getCroppedImg - Cắt ảnh từ canvas theo crop area
+ * getCroppedImg - Cắt ảnh từ canvas theo crop area + hỗ trợ xoay ảnh
  */
-async function getCroppedImg(imageSrc, pixelCrop, outputType = 'image/webp', quality = 0.88) {
-  const image = await createImageBitmap(await fetch(imageSrc).then((r) => r.blob()));
+async function getCroppedImg(imageSrc, pixelCrop, rotation = 0, outputType = 'image/webp', quality = 0.9) {
+  const image = await createImage(imageSrc);
   const canvas = document.createElement('canvas');
-  canvas.width = pixelCrop.width;
-  canvas.height = pixelCrop.height;
   const ctx = canvas.getContext('2d');
 
-  ctx.drawImage(
-    image,
+  const rotRad = getRadianAngle(rotation);
+  const { width: bBoxWidth, height: bBoxHeight } = rotateSize(image.width, image.height, rotation);
+
+  canvas.width = bBoxWidth;
+  canvas.height = bBoxHeight;
+
+  ctx.translate(bBoxWidth / 2, bBoxHeight / 2);
+  ctx.rotate(rotRad);
+  ctx.translate(-image.width / 2, -image.height / 2);
+  ctx.drawImage(image, 0, 0);
+
+  const croppedCanvas = document.createElement('canvas');
+  const croppedCtx = croppedCanvas.getContext('2d');
+
+  croppedCanvas.width = pixelCrop.width;
+  croppedCanvas.height = pixelCrop.height;
+
+  croppedCtx.drawImage(
+    canvas,
     pixelCrop.x,
     pixelCrop.y,
     pixelCrop.width,
@@ -26,7 +71,7 @@ async function getCroppedImg(imageSrc, pixelCrop, outputType = 'image/webp', qua
   );
 
   return new Promise((resolve) => {
-    canvas.toBlob(
+    croppedCanvas.toBlob(
       (blob) => {
         const file = new File([blob], `cropped_${Date.now()}.webp`, { type: outputType });
         const url = URL.createObjectURL(blob);
@@ -40,7 +85,6 @@ async function getCroppedImg(imageSrc, pixelCrop, outputType = 'image/webp', qua
 
 /**
  * ASPECT RATIO PRESETS
- * Dùng để chuẩn hóa tỷ lệ ảnh theo từng loại content
  */
 export const CROP_PRESETS = {
   SQUARE: {
@@ -63,7 +107,7 @@ export const CROP_PRESETS = {
   },
   BANNER_ULTRA: {
     aspect: 21 / 9,
-    label: '21:9 (Banner cực rộng)',
+    label: '21:9 (Banner rộng)',
     hint: 'Khuyên dùng 1920×600px',
     cropShape: 'rect',
   },
@@ -80,25 +124,35 @@ export const CROP_PRESETS = {
     cropShape: 'rect',
   },
   FREE: {
-    aspect: null,
-    label: 'Tự do',
-    hint: 'Bất kỳ kích thước nào',
+    aspect: 4 / 3,
+    label: 'Tự chọn tỷ lệ',
+    hint: 'Tùy chỉnh linh hoạt',
     cropShape: 'rect',
   },
 };
 
-/**
- * ImageCropperField
- * 
- * Component upload + crop tích hợp cho Admin panel
- * 
- * Props:
- * - label: string — nhãn field
- * - preset: keyof CROP_PRESETS — tỷ lệ crop
- * - currentUrl: string — URL ảnh hiện tại
- * - onCropped: (file, previewUrl) => void — callback khi crop xong
- * - disabled: bool
- */
+export const BUILTIN_GALLERY = [
+  { label: 'Logo mặc định', url: '/assets/logo.jpg' },
+  { label: 'Banner Hero', url: '/assets/hero-bg.jpg' },
+  { label: 'Banner Giới thiệu', url: '/assets/intro-bg.jpg' },
+  { label: 'Banner Câu chuyện TH', url: '/assets/brand-story-bg.jpg' },
+  { label: 'Sản phẩm 1', url: '/assets/product-1.jpg' },
+  { label: 'Sản phẩm 2', url: '/assets/product-2.jpg' },
+  { label: 'Sản phẩm 3', url: '/assets/product-3.jpg' },
+  { label: 'Quy trình Bước 1', url: '/assets/process-step-1.jpg' },
+  { label: 'Quy trình Bước 2', url: '/assets/process-step-2.jpg' },
+  { label: 'Quy trình Bước 3', url: '/assets/process-step-3.jpg' },
+  { label: 'Quy trình Bước 4', url: '/assets/process-step-4.jpg' },
+  { label: 'Avatar KH 1', url: '/assets/avatar-1.jpg' },
+  { label: 'Avatar KH 2', url: '/assets/avatar-2.jpg' },
+  { label: 'Avatar KH 3', url: '/assets/avatar-3.jpg' },
+  { label: 'Icon Thiên nhiên', url: '/assets/icons/usp-nature.svg' },
+  { label: 'Icon Thủ công', url: '/assets/icons/usp-craft.svg' },
+  { label: 'Icon An toàn', url: '/assets/icons/usp-safety.svg' },
+  { label: 'Icon Hương vị', url: '/assets/icons/usp-flavor.svg' },
+  { label: 'Icon Quà tặng', url: '/assets/icons/usp-gift.svg' },
+];
+
 export default function ImageCropperField({
   label,
   preset = 'SQUARE',
@@ -106,32 +160,54 @@ export default function ImageCropperField({
   onCropped,
   disabled = false,
 }) {
-  const config = CROP_PRESETS[preset] || CROP_PRESETS.SQUARE;
+  const defaultConfig = CROP_PRESETS[preset] || CROP_PRESETS.SQUARE;
   const fileInputRef = useRef();
 
-  // States
-  const [rawSrc, setRawSrc] = useState(null);         // URL ảnh gốc chưa crop
-  const [cropperOpen, setCropperOpen] = useState(false); // Modal cropper
-  const [previewUrl, setPreviewUrl] = useState(currentUrl); // URL ảnh sau crop
+  const [rawSrc, setRawSrc] = useState(null);
+  const [rawFile, setRawFile] = useState(null);
+  const [cropperOpen, setCropperOpen] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState(currentUrl || '');
   const [isDragOver, setIsDragOver] = useState(false);
+  const [showUrlInput, setShowUrlInput] = useState(false);
+  const [urlInputValue, setUrlInputValue] = useState('');
+  const [showGallery, setShowGallery] = useState(false);
 
   // react-easy-crop states
+  const [activePresetKey, setActivePresetKey] = useState(preset);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [processing, setProcessing] = useState(false);
 
+  // Đồng bộ preview khi dữ liệu từ API tải xong hoặc thay đổi
+  useEffect(() => {
+    setPreviewUrl(currentUrl || '');
+  }, [currentUrl]);
+
+  const activeConfig = CROP_PRESETS[activePresetKey] || defaultConfig;
+
   const onCropComplete = useCallback((_, pixels) => {
     setCroppedAreaPixels(pixels);
   }, []);
 
-  // Khi chọn file
+  // Khi chọn file từ máy tính
   const handleFileSelect = (file) => {
     if (!file || !file.type.startsWith('image/')) return;
+    setRawFile(file);
+
+    // Nếu là ảnh SVG hoặc GIF động, dùng trực tiếp không bắt buộc qua canvas
+    if (file.type === 'image/svg+xml') {
+      const objUrl = URL.createObjectURL(file);
+      setPreviewUrl(objUrl);
+      onCropped?.(file, objUrl);
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = (e) => {
       setRawSrc(e.target.result);
+      setActivePresetKey(preset);
       setCrop({ x: 0, y: 0 });
       setZoom(1);
       setRotation(0);
@@ -153,7 +229,7 @@ export default function ImageCropperField({
     if (!croppedAreaPixels) return;
     setProcessing(true);
     try {
-      const { file, url } = await getCroppedImg(rawSrc, croppedAreaPixels);
+      const { file, url } = await getCroppedImg(rawSrc, croppedAreaPixels, rotation);
       setPreviewUrl(url);
       onCropped?.(file, url);
       setCropperOpen(false);
@@ -165,9 +241,20 @@ export default function ImageCropperField({
     }
   };
 
+  // Dùng nguyên ảnh gốc không cắt
+  const handleUseOriginal = () => {
+    if (!rawFile) return;
+    const url = URL.createObjectURL(rawFile);
+    setPreviewUrl(url);
+    onCropped?.(rawFile, url);
+    setCropperOpen(false);
+    setRawSrc(null);
+  };
+
   const handleCropCancel = () => {
     setCropperOpen(false);
     setRawSrc(null);
+    setRawFile(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
@@ -178,7 +265,22 @@ export default function ImageCropperField({
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const isCircle = config.cropShape === 'round';
+  const handleApplyUrl = () => {
+    const trimmed = urlInputValue.trim();
+    if (!trimmed) return;
+    setPreviewUrl(trimmed);
+    onCropped?.(null, trimmed);
+    setShowUrlInput(false);
+    setUrlInputValue('');
+  };
+
+  const handlePickGallery = (url) => {
+    setPreviewUrl(url);
+    onCropped?.(null, url);
+    setShowGallery(false);
+  };
+
+  const isCircle = defaultConfig.cropShape === 'round';
 
   return (
     <>
@@ -187,7 +289,7 @@ export default function ImageCropperField({
           <label className="admin-form-label">{label}</label>
           <span className="img-crop-hint-badge">
             <FiCrop size={11} />
-            {config.label} · {config.hint}
+            {defaultConfig.label} · {defaultConfig.hint}
           </span>
         </div>
 
@@ -195,12 +297,14 @@ export default function ImageCropperField({
         <div
           className={`img-crop-drop-area ${isDragOver ? 'drag-over' : ''} ${disabled ? 'disabled' : ''}`}
           onClick={() => !disabled && fileInputRef.current?.click()}
-          onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragOver(true);
+          }}
           onDragLeave={() => setIsDragOver(false)}
           onDrop={handleDrop}
         >
           {previewUrl ? (
-            /* Preview */
             <div className={`img-crop-preview-wrap ${isCircle ? 'circle' : ''}`}>
               <img
                 src={previewUrl}
@@ -212,10 +316,13 @@ export default function ImageCropperField({
                   <button
                     type="button"
                     className="img-crop-preview-btn change"
-                    onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-                    title="Thay ảnh"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      fileInputRef.current?.click();
+                    }}
+                    title="Tải ảnh mới từ máy"
                   >
-                    <FiUpload size={14} /> Thay ảnh
+                    <FiUpload size={13} /> Thay ảnh
                   </button>
                   <button
                     type="button"
@@ -223,38 +330,100 @@ export default function ImageCropperField({
                     onClick={handleRemove}
                     title="Xóa ảnh"
                   >
-                    <FiX size={14} />
+                    <FiX size={13} />
                   </button>
                 </div>
               )}
             </div>
           ) : (
-            /* Empty state */
             <div className="img-crop-empty">
               <div className="img-crop-empty-icon">
-                <FiUpload size={28} />
+                <FiUpload size={26} />
               </div>
               <div className="img-crop-empty-text">
-                <span>Kéo thả ảnh vào đây hoặc <strong>click để chọn</strong></span>
+                <span>
+                  Kéo thả ảnh vào đây hoặc <strong>bấm để tải ảnh lên</strong>
+                </span>
               </div>
-              <div className="img-crop-empty-formats">
-                JPG, PNG, WebP · Tối đa 10MB
-              </div>
-              <div className="img-crop-empty-recommended">
-                📐 {config.hint}
-              </div>
+              <div className="img-crop-empty-formats">JPG, PNG, WebP, SVG · Tối đa 10MB</div>
+              <div className="img-crop-empty-recommended">📐 {defaultConfig.hint}</div>
             </div>
           )}
 
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/jpeg,image/png,image/webp,image/gif"
+            accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
             onChange={handleInputChange}
             style={{ display: 'none' }}
             disabled={disabled}
           />
         </div>
+
+        {/* Quick Tools: Dán URL hoặc Chọn từ thư viện có sẵn */}
+        {!disabled && (
+          <div className="img-crop-quick-tools">
+            <button
+              type="button"
+              className={`img-crop-tool-btn ${showUrlInput ? 'active' : ''}`}
+              onClick={() => {
+                setShowUrlInput(!showUrlInput);
+                setShowGallery(false);
+                setUrlInputValue(previewUrl.startsWith('blob:') ? '' : previewUrl);
+              }}
+            >
+              <FiLink size={12} /> Nhập link ảnh
+            </button>
+            <button
+              type="button"
+              className={`img-crop-tool-btn ${showGallery ? 'active' : ''}`}
+              onClick={() => {
+                setShowGallery(!showGallery);
+                setShowUrlInput(false);
+              }}
+            >
+              <FiImage size={12} /> Kho ảnh mẫu
+            </button>
+          </div>
+        )}
+
+        {showUrlInput && (
+          <div className="img-crop-url-box">
+            <input
+              type="text"
+              className="admin-form-input"
+              placeholder="Dán đường dẫn ảnh (https://... hoặc /assets/...)"
+              value={urlInputValue}
+              onChange={(e) => setUrlInputValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleApplyUrl();
+                }
+              }}
+            />
+            <button type="button" className="admin-action-btn edit" onClick={handleApplyUrl}>
+              Áp dụng
+            </button>
+          </div>
+        )}
+
+        {showGallery && (
+          <div className="img-crop-gallery-box">
+            {BUILTIN_GALLERY.map((item) => (
+              <button
+                key={item.url}
+                type="button"
+                className={`img-crop-gallery-item ${previewUrl === item.url ? 'selected' : ''}`}
+                onClick={() => handlePickGallery(item.url)}
+                title={item.label}
+              >
+                <img src={item.url} alt={item.label} />
+                <span>{item.label}</span>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* ============================
@@ -263,30 +432,39 @@ export default function ImageCropperField({
       {cropperOpen && rawSrc && (
         <div className="img-crop-modal-overlay">
           <div className="img-crop-modal">
-            {/* Header */}
             <div className="img-crop-modal-header">
               <div className="img-crop-modal-title">
                 <FiCrop size={18} />
-                Cắt ảnh — {config.label}
+                Căn chỉnh &amp; Cắt ảnh — {activeConfig.label}
               </div>
-              <button
-                type="button"
-                className="img-crop-modal-close"
-                onClick={handleCropCancel}
-              >
+              <button type="button" className="img-crop-modal-close" onClick={handleCropCancel}>
                 <FiX />
               </button>
             </div>
 
-            {/* Crop Canvas */}
+            {/* Aspect Ratio Selector */}
+            <div className="img-crop-ratio-bar">
+              <span className="img-crop-ratio-label">Tỷ lệ khung:</span>
+              {Object.entries(CROP_PRESETS).map(([key, cfg]) => (
+                <button
+                  key={key}
+                  type="button"
+                  className={`img-crop-ratio-btn ${activePresetKey === key ? 'active' : ''}`}
+                  onClick={() => setActivePresetKey(key)}
+                >
+                  {cfg.label}
+                </button>
+              ))}
+            </div>
+
             <div className="img-crop-canvas-wrap">
               <Cropper
                 image={rawSrc}
                 crop={crop}
                 zoom={zoom}
                 rotation={rotation}
-                aspect={config.aspect}
-                cropShape={config.cropShape}
+                aspect={activeConfig.aspect || 4 / 3}
+                cropShape={activeConfig.cropShape}
                 showGrid={true}
                 onCropChange={setCrop}
                 onZoomChange={setZoom}
@@ -298,12 +476,10 @@ export default function ImageCropperField({
               />
             </div>
 
-            {/* Controls */}
             <div className="img-crop-controls">
-              {/* Zoom */}
               <div className="img-crop-control-group">
                 <label className="img-crop-control-label">
-                  <FiZoomIn size={14} /> Zoom
+                  <FiZoomIn size={14} /> Phóng to
                 </label>
                 <input
                   type="range"
@@ -317,7 +493,6 @@ export default function ImageCropperField({
                 <span className="img-crop-control-value">{zoom.toFixed(1)}×</span>
               </div>
 
-              {/* Rotation */}
               <div className="img-crop-control-group">
                 <label className="img-crop-control-label">
                   <FiRotateCw size={14} /> Xoay
@@ -335,19 +510,23 @@ export default function ImageCropperField({
               </div>
             </div>
 
-            {/* Info */}
             <div className="img-crop-info">
-              <span>💡 Ảnh sau khi cắt sẽ được tự động chuyển sang <strong>.webp</strong> để tối ưu tốc độ tải trang</span>
+              <span>
+                💡 Bạn có thể kéo ảnh để chọn góc đẹp nhất hoặc bấm <strong>Giữ nguyên ảnh gốc</strong> nếu ảnh đã đúng kích thước / tách nền.
+              </span>
             </div>
 
-            {/* Actions */}
             <div className="img-crop-modal-footer">
+              <button type="button" className="img-crop-btn cancel" onClick={handleCropCancel}>
+                <FiX size={14} /> Hủy
+              </button>
               <button
                 type="button"
-                className="img-crop-btn cancel"
-                onClick={handleCropCancel}
+                className="img-crop-btn original"
+                onClick={handleUseOriginal}
+                disabled={processing}
               >
-                <FiX size={14} /> Hủy
+                Giữ nguyên ảnh gốc
               </button>
               <button
                 type="button"
@@ -355,11 +534,7 @@ export default function ImageCropperField({
                 onClick={handleCropConfirm}
                 disabled={processing}
               >
-                {processing ? (
-                  <span className="img-crop-spinner" />
-                ) : (
-                  <FiCheck size={14} />
-                )}
+                {processing ? <span className="img-crop-spinner" /> : <FiCheck size={14} />}
                 {processing ? 'Đang xử lý...' : 'Xác nhận cắt ảnh'}
               </button>
             </div>
@@ -369,4 +544,3 @@ export default function ImageCropperField({
     </>
   );
 }
-

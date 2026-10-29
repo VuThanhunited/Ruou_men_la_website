@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid slice">
+  <filter id="noise">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+    <feComponentTransfer>
+      <feFuncA type="linear" slope="0.045"/>
+    </feComponentTransfer>
+    <feComposite in="SourceGraphic" operator="over"/>
+  </filter>
+  <rect width="800" height="800" fill="#F5EFE0"/>
+  <rect width="800" height="800" filter="url(#noise)" fill="#8C5A2B"/>
+  <!-- Subtle vein-like paper texture -->
+  <path d="M0 200 Q200 195 400 205 Q600 215 800 200" stroke="#D4B896" stroke-width="0.5" fill="none" opacity="0.3"/>
+  <path d="M0 400 Q250 393 500 408 Q650 415 800 400" stroke="#C4A87E" stroke-width="0.5" fill="none" opacity="0.25"/>
+  <path d="M0 600 Q180 595 350 608 Q550 618 800 600" stroke="#D4B896" stroke-width="0.5" fill="none" opacity="0.2"/>
+  <path d="M200 0 Q205 250 195 500 Q190 650 200 800" stroke="#C4A87E" stroke-width="0.4" fill="none" opacity="0.2"/>
+  <path d="M600 0 Q608 200 595 450 Q588 620 600 800" stroke="#D4B896" stroke-width="0.4" fill="none" opacity="0.18"/>
+</svg>

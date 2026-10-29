@@ -1,15 +1,26 @@
-﻿import { useEffect, useState } from 'react';
-import { FiPackage, FiMessageSquare, FiUsers, FiCpu, FiExternalLink } from 'react-icons/fi';
+import { useEffect, useState } from 'react';
+import {
+  FiPackage,
+  FiMessageSquare,
+  FiUsers,
+  FiCpu,
+  FiExternalLink,
+  FiFileText,
+  FiAward,
+} from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import AdminLayout from './AdminLayout';
 import api from '../services/api';
+
+const LANDING_URL = import.meta.env.VITE_LANDING_URL || 'http://localhost:5173';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get('/admin/stats')
+    api
+      .get('/admin/stats')
       .then((res) => setStats(res.data.data))
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -17,24 +28,30 @@ export default function AdminDashboard() {
 
   const statCards = stats
     ? [
-        { icon: <FiPackage />, label: 'Sản phẩm', value: stats.products, path: '/', color: 'var(--color-primary)' },
-        { icon: <FiMessageSquare />, label: 'Đánh giá', value: stats.testimonials, path: '/', color: 'var(--color-accent-gold)' },
-        { icon: <FiUsers />, label: 'Subscribers', value: stats.subscribers, path: '/', color: 'var(--color-accent-brown)' },
-        { icon: <FiCpu />, label: 'Bước quy trình', value: stats.processSteps, path: '/', color: '#6366f1' },
+        { icon: <FiPackage />, label: 'Sản phẩm', value: stats.products, path: '/products', color: 'var(--color-primary)' },
+        { icon: <FiAward />, label: 'Điểm nổi bật (USP)', value: stats.uspFeatures ?? 5, path: '/usp', color: '#059669' },
+        { icon: <FiCpu />, label: 'Bước quy trình', value: stats.processSteps, path: '/process', color: '#6366f1' },
+        { icon: <FiFileText />, label: 'Bài viết Tin tức', value: stats.news ?? 3, path: '/news', color: '#d97706' },
+        { icon: <FiMessageSquare />, label: 'Đánh giá KH', value: stats.testimonials, path: '/testimonials', color: 'var(--color-accent-gold)' },
+        { icon: <FiUsers />, label: 'Subscribers', value: stats.subscribers, path: '/subscribers', color: 'var(--color-accent-brown)' },
       ]
     : [];
 
   const quickActions = [
-    { label: 'Cập nhật Hero', path: '/', desc: 'Logo, ảnh nền, tiêu đề, hotline' },
-    { label: 'Quản lý sản phẩm', path: '/', desc: 'Thêm, sửa, xóa sản phẩm' },
-    { label: 'Đánh giá KH', path: '/', desc: 'Thêm phản hồi khách hàng' },
-    { label: 'Câu chuyện TH', path: '/', desc: 'Cập nhật nội dung banner story' },
-    { label: 'Cấu hình chung', path: '/', desc: 'Footer, địa chỉ, mạng xã hội' },
-    { label: 'Quy trình SX', path: '/', desc: 'Quản lý 4 bước sản xuất' },
+    { label: '🎨 Tùy chỉnh Giao diện', path: '/theme', desc: 'Đổi bảng màu, font chữ, ẩn/hiện & sắp xếp các phần' },
+    { label: '🖼️ Hero, Banner & Logo', path: '/hero', desc: 'Thay Logo, ảnh nền Hero, chum rượu, tiêu đề, hotline' },
+    { label: '🏅 Điểm nổi bật (USP)', path: '/usp', desc: 'Thay icon và nội dung 5 điểm nổi bật dưới Hero' },
+    { label: '🌿 Banner Giới thiệu', path: '/intro', desc: 'Thay ảnh nền và nội dung phần Tinh hoa Men Lá Việt' },
+    { label: '🏺 Quản lý Sản phẩm', path: '/products', desc: 'Thêm, sửa, xóa sản phẩm và hình ảnh sản phẩm' },
+    { label: '⚙️ Quy trình Sản xuất', path: '/process', desc: 'Thay ảnh tròn 4 bước quy trình và chi tiết từng bước' },
+    { label: '🌄 Câu chuyện Thương hiệu', path: '/brand-story', desc: 'Thay ảnh nền banner rộng và câu chuyện HTX' },
+    { label: '📰 Tin tức & Văn hóa', path: '/news', desc: 'Quản lý bài viết tin tức và hình ảnh bìa bài viết' },
+    { label: '⭐ Đánh giá Khách hàng', path: '/testimonials', desc: 'Thay ảnh đại diện và nhận xét của khách hàng' },
+    { label: '⚙️ Cấu hình & Footer', path: '/site-config', desc: 'Logo Footer, địa chỉ, SĐT, mạng xã hội, SEO' },
   ];
 
   return (
-    <AdminLayout title="Dashboard">
+    <AdminLayout title="Dashboard Quản trị">
       {/* Welcome */}
       <div
         style={{
@@ -46,6 +63,8 @@ export default function AdminDashboard() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '1rem',
         }}
       >
         <div>
@@ -58,18 +77,19 @@ export default function AdminDashboard() {
           >
             Chào mừng trở lại! 🍶
           </h1>
-          <p style={{ opacity: 0.8, fontSize: '0.9rem' }}>
-            Quản lý toàn bộ nội dung Landing Page Rượu Men Lá Yến Nhi
+          <p style={{ opacity: 0.85, fontSize: '0.9rem' }}>
+            Quản lý toàn bộ giao diện, màu sắc, hình ảnh sản phẩm, banner, logo của Landing Page Rượu Men Lá Yến Nhi
           </p>
         </div>
-        <Link
-          to="/"
+        <a
+          href={LANDING_URL}
           target="_blank"
+          rel="noopener noreferrer"
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            background: 'rgba(255,255,255,0.15)',
+            background: 'rgba(255,255,255,0.18)',
             padding: '0.625rem 1.25rem',
             borderRadius: 'var(--radius-full)',
             color: 'inherit',
@@ -77,14 +97,17 @@ export default function AdminDashboard() {
             fontWeight: 600,
           }}
         >
-          <FiExternalLink size={14} /> Xem Landing Page
-        </Link>
+          <FiExternalLink size={14} /> Xem Trang Client
+        </a>
       </div>
 
       {/* Stats */}
-      <div className="admin-stats-grid">
+      <div
+        className="admin-stats-grid"
+        style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}
+      >
         {loading
-          ? Array.from({ length: 4 }, (_, i) => (
+          ? Array.from({ length: 6 }, (_, i) => (
               <div key={i} className="admin-stat-card">
                 <div className="skeleton" style={{ width: 52, height: 52, borderRadius: 8 }} />
                 <div>
@@ -95,7 +118,7 @@ export default function AdminDashboard() {
             ))
           : statCards.map((card) => (
               <Link key={card.path} to={card.path} style={{ textDecoration: 'none' }}>
-                <div className="admin-stat-card" style={{ cursor: 'pointer' }}>
+                <div className="admin-stat-card" style={{ cursor: 'pointer', borderLeftColor: card.color }}>
                   <div className="admin-stat-icon" style={{ background: `${card.color}18` }}>
                     <span style={{ color: card.color, fontSize: '1.5rem' }}>{card.icon}</span>
                   </div>
@@ -113,13 +136,13 @@ export default function AdminDashboard() {
       {/* Quick Actions */}
       <div className="admin-panel-card">
         <div className="admin-panel-header">
-          <div className="admin-panel-title">⚡ Thao tác nhanh</div>
+          <div className="admin-panel-title">⚡ Quản lý Giao diện &amp; Hình ảnh nhanh</div>
         </div>
         <div className="admin-panel-body">
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
               gap: '1rem',
             }}
           >
@@ -129,15 +152,15 @@ export default function AdminDashboard() {
                 to={action.path}
                 style={{
                   display: 'block',
-                  padding: '1rem',
+                  padding: '1.1rem',
                   background: 'rgba(38,62,35,0.04)',
                   borderRadius: 'var(--radius-lg)',
-                  border: '1px solid rgba(38,62,35,0.08)',
+                  border: '1px solid rgba(38,62,35,0.1)',
                   transition: 'all 0.2s ease',
                   textDecoration: 'none',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(38,62,35,0.08)';
+                  e.currentTarget.style.background = 'rgba(38,62,35,0.09)';
                   e.currentTarget.style.transform = 'translateY(-2px)';
                 }}
                 onMouseLeave={(e) => {
@@ -150,13 +173,13 @@ export default function AdminDashboard() {
                     fontFamily: 'var(--font-serif)',
                     fontWeight: 700,
                     color: 'var(--color-primary)',
-                    marginBottom: '0.25rem',
-                    fontSize: '0.9rem',
+                    marginBottom: '0.3rem',
+                    fontSize: '0.92rem',
                   }}
                 >
                   {action.label}
                 </div>
-                <div style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>
+                <div style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
                   {action.desc}
                 </div>
               </Link>
@@ -167,5 +190,3 @@ export default function AdminDashboard() {
     </AdminLayout>
   );
 }
-
-

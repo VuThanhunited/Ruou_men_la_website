@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { FiSave } from 'react-icons/fi';
 import AdminLayout from './AdminLayout';
@@ -31,7 +31,11 @@ export default function AdminBrandStoryPage() {
     try {
       const fd = new FormData();
       Object.entries(form).forEach(([k, v]) => fd.append(k, v));
-      if (bgCroppedFile) fd.append('storyBgUrl', bgCroppedFile);
+      if (bgCroppedFile) {
+        fd.append('storyBgUrl', bgCroppedFile);
+      } else {
+        fd.append('storyBgUrl', bgCroppedPreview);
+      }
       await api.put('/admin/brand-story', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
       toast.success('✅ Lưu Câu chuyện thương hiệu thành công');
     } catch { toast.error('Lỗi lưu'); }

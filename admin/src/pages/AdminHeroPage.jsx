@@ -1,8 +1,8 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { FiSave } from 'react-icons/fi';
 import AdminLayout from './AdminLayout';
-import ImageCropperField, { CROP_PRESETS } from '../components/ImageCropperField';
+import ImageCropperField from '../components/ImageCropperField';
 import api from '../services/api';
 
 export default function AdminHeroPage() {
@@ -16,29 +16,51 @@ export default function AdminHeroPage() {
     sideBannerText: '',
   });
   const [files, setFiles] = useState({});
-  const [currentData, setCurrentData] = useState({});
+  const [previews, setPreviews] = useState({
+    logoUrl: '/assets/logo.jpg',
+    heroBgUrl: '/assets/hero-bg.jpg',
+    heroProductUrl: '',
+    sideBannerBgUrl: '',
+  });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    api.get('/hero').then((res) => {
-      const d = res.data.data || {};
-      setForm({
-        title: d.title || '',
-        subtitle: d.subtitle || '',
-        description: d.description || '',
-        ctaText: d.ctaText || '',
-        ctaLink: d.ctaLink || '',
-        hotline: d.hotline || '',
-        sideBannerText: d.sideBannerText || '',
-      });
-      setCurrentData(d);
-    }).finally(() => setLoading(false));
+    api
+      .get('/hero')
+      .then((res) => {
+        const d = res.data.data || {};
+        setForm({
+          title: d.title || '',
+          subtitle: d.subtitle || '',
+          description: d.description || '',
+          ctaText: d.ctaText || '',
+          ctaLink: d.ctaLink || '',
+          hotline: d.hotline || '',
+          sideBannerText: d.sideBannerText || '',
+        });
+        setPreviews({
+          logoUrl: d.logoUrl || '/assets/logo.jpg',
+          heroBgUrl: d.heroBgUrl || '/assets/hero-bg.jpg',
+          heroProductUrl: d.heroProductUrl || '',
+          sideBannerBgUrl: d.sideBannerBgUrl || '',
+        });
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  const handleCropped = (fieldName) => (file) => {
-    if (file) setFiles((prev) => ({ ...prev, [fieldName]: file }));
-    else setFiles((prev) => { const n = { ...prev }; delete n[fieldName]; return n; });
+  const handleCropped = (fieldName) => (file, url) => {
+    if (file) {
+      setFiles((prev) => ({ ...prev, [fieldName]: file }));
+      setPreviews((prev) => ({ ...prev, [fieldName]: url || '' }));
+    } else {
+      setFiles((prev) => {
+        const n = { ...prev };
+        delete n[fieldName];
+        return n;
+      });
+      setPreviews((prev) => ({ ...prev, [fieldName]: url || '' }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -47,11 +69,26 @@ export default function AdminHeroPage() {
     try {
       const fd = new FormData();
       Object.entries(form).forEach(([k, v]) => fd.append(k, v));
-      Object.entries(files).forEach(([k, v]) => { if (v) fd.append(k, v); });
-      await api.put('/admin/hero', fd, {
+      ['logoUrl', 'heroBgUrl', 'heroProductUrl', 'sideBannerBgUrl'].forEach((field) => {
+        if (files[field]) {
+          fd.append(field, files[field]);
+        } else {
+          fd.append(field, previews[field] || '');
+        }
+      });
+
+      const res = await api.put('/admin/hero', fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      toast.success('✅ Lưu Hero Section thành công!');
+      const updated = res.data.data || {};
+      setPreviews({
+        logoUrl: updated.logoUrl || '',
+        heroBgUrl: updated.heroBgUrl || '',
+        heroProductUrl: updated.heroProductUrl || '',
+        sideBannerBgUrl: updated.sideBannerBgUrl || '',
+      });
+      setFiles({});
+      toast.success('✅ Lưu Hero, Banner & Logo thành công!');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Có lỗi xảy ra');
     } finally {
@@ -61,7 +98,7 @@ export default function AdminHeroPage() {
 
   if (loading) {
     return (
-      <AdminLayout title="Hero & Navbar">
+      <AdminLayout title="Hero, Banner & Logo">
         <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--color-text-muted)' }}>
           Đang tải...
         </div>
@@ -70,40 +107,40 @@ export default function AdminHeroPage() {
   }
 
   return (
-    <AdminLayout title="Quản lý Hero Section">
+    <AdminLayout title="Quản lý Hero Banner & Logo">
       <form onSubmit={handleSubmit}>
         {/* Images Card */}
         <div className="admin-panel-card">
           <div className="admin-panel-header">
-            <div className="admin-panel-title">🖼️ Hình ảnh Hero</div>
+            <div className="admin-panel-title">🖼️ Hình ảnh Logo &amp; Banner Hero</div>
             <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-              Ảnh sẽ tự động cắt đúng tỷ lệ và chuyển sang .webp
+              Có thể tải ảnh từ máy tính, cắt theo tỷ lệ, nhập link URL hoặc chọn từ kho ảnh mẫu
             </span>
           </div>
           <div className="admin-panel-body">
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
               <ImageCropperField
-                label="Logo tròn (Navbar + Footer)"
+                label="Logo thương hiệu (Hiển thị trên Navbar, Footer & Popup)"
                 preset="CIRCLE"
-                currentUrl={currentData.logoUrl}
+                currentUrl={previews.logoUrl}
                 onCropped={handleCropped('logoUrl')}
               />
               <ImageCropperField
-                label="Ảnh nền Hero (Ruộng bậc thang)"
+                label="Ảnh nền Banner Hero (Toàn màn hình đầu trang)"
                 preset="HERO_BG"
-                currentUrl={currentData.heroBgUrl}
+                currentUrl={previews.heroBgUrl}
                 onCropped={handleCropped('heroBgUrl')}
               />
               <ImageCropperField
-                label="Ảnh sản phẩm tiền cảnh (Chum rượu PNG)"
+                label="Ảnh sản phẩm nổi bật góc phải Hero (Chum rượu PNG - tùy chọn)"
                 preset="INTRO_BANNER"
-                currentUrl={currentData.heroProductUrl}
+                currentUrl={previews.heroProductUrl}
                 onCropped={handleCropped('heroProductUrl')}
               />
               <ImageCropperField
-                label="Ảnh bảng gỗ bên cạnh (tùy chọn)"
+                label="Ảnh nền bảng gỗ bên cạnh (Tùy chọn)"
                 preset="FREE"
-                currentUrl={currentData.sideBannerBgUrl}
+                currentUrl={previews.sideBannerBgUrl}
                 onCropped={handleCropped('sideBannerBgUrl')}
               />
             </div>
@@ -113,34 +150,33 @@ export default function AdminHeroPage() {
         {/* Text Content Card */}
         <div className="admin-panel-card">
           <div className="admin-panel-header">
-            <div className="admin-panel-title">✏️ Nội dung văn bản</div>
+            <div className="admin-panel-title">✏️ Nội dung văn bản trên Hero &amp; Navbar</div>
           </div>
           <div className="admin-panel-body">
             <div className="admin-form-grid">
               <div className="admin-form-group">
                 <label className="admin-form-label">
-                  Tiêu đề chính (Font Script lớn)
+                  Tiêu đề chính (Xuống dòng để tách chữ "Rượu" và "Men Lá")
                 </label>
-                <input
-                  className="admin-form-input"
+                <textarea
+                  className="admin-form-textarea"
+                  rows={2}
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  placeholder="Rượu Men Lá"
+                  placeholder="Rượu&#10;Men Lá"
                 />
               </div>
               <div className="admin-form-group">
-                <label className="admin-form-label">Hotline (hiện trên Navbar)</label>
+                <label className="admin-form-label">Số Hotline (Hiện trên thanh Navbar &amp; Đặt hàng)</label>
                 <input
                   className="admin-form-input"
                   value={form.hotline}
                   onChange={(e) => setForm({ ...form, hotline: e.target.value })}
-                  placeholder="0866.603.589"
+                  placeholder="0372.477.078"
                 />
               </div>
               <div className="admin-form-group full-width">
-                <label className="admin-form-label">
-                  Subtitle (Font Script vừa)
-                </label>
+                <label className="admin-form-label">Khẩu hiệu phụ (Subtitle)</label>
                 <input
                   className="admin-form-input"
                   value={form.subtitle}
@@ -149,7 +185,7 @@ export default function AdminHeroPage() {
                 />
               </div>
               <div className="admin-form-group full-width">
-                <label className="admin-form-label">Đoạn mô tả ngắn (Body text)</label>
+                <label className="admin-form-label">Đoạn mô tả ngắn</label>
                 <textarea
                   className="admin-form-textarea"
                   value={form.description}
@@ -158,7 +194,7 @@ export default function AdminHeroPage() {
                 />
               </div>
               <div className="admin-form-group">
-                <label className="admin-form-label">Text nút CTA</label>
+                <label className="admin-form-label">Chữ nút hành động (CTA)</label>
                 <input
                   className="admin-form-input"
                   value={form.ctaText}
@@ -167,18 +203,16 @@ export default function AdminHeroPage() {
                 />
               </div>
               <div className="admin-form-group">
-                <label className="admin-form-label">Link nút CTA</label>
+                <label className="admin-form-label">Liên kết nút CTA</label>
                 <input
                   className="admin-form-input"
                   value={form.ctaLink}
                   onChange={(e) => setForm({ ...form, ctaLink: e.target.value })}
-                  placeholder="/san-pham"
+                  placeholder="#san-pham"
                 />
               </div>
               <div className="admin-form-group full-width">
-                <label className="admin-form-label">
-                  Chữ bảng gỗ bên cạnh
-                </label>
+                <label className="admin-form-label">Chữ trên bảng gỗ bên cạnh</label>
                 <input
                   className="admin-form-input"
                   value={form.sideBannerText}
@@ -199,4 +233,3 @@ export default function AdminHeroPage() {
     </AdminLayout>
   );
 }
-

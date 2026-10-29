@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { FiArrowRight } from 'react-icons/fi';
 
 const STEP_EMOJIS = ['🌾', '🌿', '🏺', '✨'];
@@ -7,16 +6,48 @@ const LEAF_BL = '/assets/leaf-corner-bl.svg';
 
 export default function ProcessSection({ section, steps = [], onOpenProcessModal }) {
   return (
-    <section className="process-section" id="quy-trinh">
+    <section
+      className="process-section"
+      id="quy-trinh"
+      style={
+        section?.decorBgUrl
+          ? {
+              backgroundImage: `linear-gradient(rgba(244,239,230,0.88), rgba(244,239,230,0.88)), url(${section.decorBgUrl})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }
+          : undefined
+      }
+    >
       {/* Static leaf decorations */}
-      <img src={LEAF_TR} alt="" aria-hidden="true" style={{
-        position: 'absolute', top: 0, right: 0, width: 220,
-        opacity: 0.09, pointerEvents: 'none', zIndex: 0,
-      }} />
-      <img src={LEAF_BL} alt="" aria-hidden="true" style={{
-        position: 'absolute', bottom: 0, left: 0, width: 180,
-        opacity: 0.07, pointerEvents: 'none', zIndex: 0,
-      }} />
+      <img
+        src={LEAF_TR}
+        alt=""
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          width: 220,
+          opacity: 0.09,
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
+      <img
+        src={LEAF_BL}
+        alt=""
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          width: 180,
+          opacity: 0.07,
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
 
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <div className="process-section-inner">
@@ -29,7 +60,8 @@ export default function ProcessSection({ section, steps = [], onOpenProcessModal
               {section?.sectionSubtitle || 'Giữ trọn hương vị tự nhiên'}
             </div>
             <p className="process-section-desc">
-              {section?.sectionDescription || 'Rượu Men Lá Yến Nhi được làm từ gạo nếp chọn lọc, men lá rừng truyền thống, ủ thủ công theo bí quyết dân gian, đảm bảo hương vị thuần khiết và an toàn cho sức khỏe.'}
+              {section?.sectionDescription ||
+                'Rượu Men Lá Yến Nhi được làm từ gạo nếp chọn lọc, men lá rừng truyền thống, ủ thủ công theo bí quyết dân gian, đảm bảo hương vị thuần khiết và an toàn cho sức khỏe.'}
             </p>
             <button
               type="button"
@@ -47,17 +79,23 @@ export default function ProcessSection({ section, steps = [], onOpenProcessModal
                 <div key={step._id || idx} style={{ display: 'flex', alignItems: 'flex-start' }}>
                   <div
                     className="process-step"
-                    onClick={() => onOpenProcessModal && onOpenProcessModal(step.stepNumber || idx + 1)}
+                    onClick={() =>
+                      onOpenProcessModal && onOpenProcessModal(step.stepNumber || idx + 1)
+                    }
                     style={{ cursor: 'pointer' }}
                     title={`Bấm để xem chi tiết Bước ${step.stepNumber}: ${step.title}`}
                   >
-                    {/* Ảnh tròn cố định 1:1 */}
                     <div className="process-step-img-wrap">
                       {step.imageUrl ? (
                         <img
                           src={step.imageUrl}
                           alt={step.title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            display: 'block',
+                          }}
                         />
                       ) : (
                         <div className="process-step-placeholder">
@@ -67,17 +105,29 @@ export default function ProcessSection({ section, steps = [], onOpenProcessModal
                     </div>
                     <div className="process-step-number">{step.stepNumber}</div>
                     <div className="process-step-title">{step.title}</div>
-                    {step.subtitle && (
-                      <div className="process-step-subtitle">{step.subtitle}</div>
-                    )}
+                    {step.subtitle && <div className="process-step-subtitle">{step.subtitle}</div>}
                   </div>
 
-                  {/* Mũi tên tĩnh giữa các bước */}
                   {idx < steps.length - 1 && (
                     <div className="process-arrow">
                       <svg width="36" height="16" viewBox="0 0 36 16" fill="none">
-                        <line x1="0" y1="8" x2="28" y2="8" stroke="#C59B5F" strokeWidth="2" strokeLinecap="round"/>
-                        <polyline points="22,2 32,8 22,14" stroke="#C59B5F" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" fill="none"/>
+                        <line
+                          x1="0"
+                          y1="8"
+                          x2="28"
+                          y2="8"
+                          stroke="var(--color-accent-gold)"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                        <polyline
+                          points="22,2 32,8 22,14"
+                          stroke="var(--color-accent-gold)"
+                          strokeWidth="2"
+                          strokeLinejoin="round"
+                          strokeLinecap="round"
+                          fill="none"
+                        />
                       </svg>
                     </div>
                   )}

@@ -12,9 +12,10 @@ const DETAILED_STEPS = [
     details: [
       'Gạo nếp nương: Lựa chọn những hạt nếp nương mùa vụ mới của đồng bào miền núi phía Bắc, hạt tròn đều, mẩy căng, khi nấu lên dẻo quánh và dậy mùi thơm nồng nàn.',
       'Nguồn nước khoáng tự nhiên: Sử dụng nước nguồn thanh khiết từ các khe suối đá trên núi cao, giàu khoáng chất tự nhiên, giúp rượu có hậu vị ngọt thanh mát lành.',
-      'Sơ chế kỹ lưỡng: Gạo được ngâm và vo sạch bằng nước suối trong, loại bỏ hoàn toàn hạt lép và tạp chất trước khi đưa vào chõ gỗ đồ chín.'
+      'Sơ chế kỹ lưỡng: Gạo được ngâm và vo sạch bằng nước suối trong, loại bỏ hoàn toàn hạt lép và tạp chất trước khi đưa vào chõ gỗ đồ chín.',
     ],
-    secret: 'Chỉ sử dụng nếp nương gieo trồng tự nhiên trên nương rẫy, tuyệt đối không dùng gạo pha tạp chất hay chất kích thích.'
+    secret:
+      'Chỉ sử dụng nếp nương gieo trồng tự nhiên trên nương rẫy, tuyệt đối không dùng gạo pha tạp chất hay chất kích thích.',
   },
   {
     stepNumber: 2,
@@ -25,9 +26,10 @@ const DETAILED_STEPS = [
     details: [
       'Hơn 20 vị thảo dược quý: Người nghệ nhân phải trèo đèo lội suối vào rừng sâu ở độ cao hơn 1.000m để hái lá trầu rừng, hoàng đằng, quả ké đầu ngựa, trần bì, nhân trần, thảo quả...',
       'Chế biến công phu: Rửa sạch, phơi khô trong bóng râm (âm can) để giữ trọn tinh dầu, sau đó giã và nghiền mịn thành bột thuốc nam.',
-      'Nặn bánh men thủ công: Bột thảo dược được nhào kỹ cùng bột gạo nếp, nặn thành từng bánh men tròn đều tay và ủ trong lớp rơm nếp khô sạch để men sinh sôi tự nhiên.'
+      'Nặn bánh men thủ công: Bột thảo dược được nhào kỹ cùng bột gạo nếp, nặn thành từng bánh men tròn đều tay và ủ trong lớp rơm nếp khô sạch để men sinh sôi tự nhiên.',
     ],
-    secret: 'Men lá giúp phân giải hoàn toàn các chất độc hại, làm rượu uống êm ru, ấm tỳ vị, lưu thông khí huyết và không bao giờ gây đau đầu hay khô cổ.'
+    secret:
+      'Men lá giúp phân giải hoàn toàn các chất độc hại, làm rượu uống êm ru, ấm tỳ vị, lưu thông khí huyết và không bao giờ gây đau đầu hay khô cổ.',
   },
   {
     stepNumber: 3,
@@ -38,9 +40,10 @@ const DETAILED_STEPS = [
     details: [
       'Đồ cơm và trộn men: Cơm nếp nương sau khi đồ chín tới được trải đều ra nong tre cho nguội bớt, sau đó rắc đều bột men lá rừng theo tỷ lệ vàng gia truyền.',
       'Ủ khô và ủ ướt: Rượu trải qua quá trình lên men yếm khí tự nhiên trong điều kiện nhiệt độ phòng núi rừng mát mẻ quanh năm.',
-      'Chum sành không tráng men: Chuyển toàn bộ bỗng rượu vào các chum gốm nung mộc tự nhiên. Độ xốp vi mô của chum sành giúp rượu "thở", thẩm thấu oxy và thúc đẩy quá trình lão hóa làm mềm giọt rượu.'
+      'Chum sành không tráng men: Chuyển toàn bộ bỗng rượu vào các chum gốm nung mộc tự nhiên. Độ xốp vi mô của chum sành giúp rượu "thở", thẩm thấu oxy và thúc đẩy quá trình lão hóa làm mềm giọt rượu.',
     ],
-    secret: 'Rượu được hạ thổ hoặc ủ chum sành tối thiểu từ 6 đến 12 tháng, giúp đào thải triệt để độc tố Andehit và Methanol.'
+    secret:
+      'Rượu được hạ thổ hoặc ủ chum sành tối thiểu từ 6 đến 12 tháng, giúp đào thải triệt để độc tố Andehit và Methanol.',
   },
   {
     stepNumber: 4,
@@ -51,14 +54,36 @@ const DETAILED_STEPS = [
     details: [
       'Nồi đồng truyền thống: Sử dụng nồi đồng thủ công và đun bằng củi lửa nhỏ liu riu, giữ nhiệt ổn định để giọt rượu ngưng tụ từ từ, gom trọn hương thơm tinh túy của thảo mộc.',
       'Hệ thống lọc tinh hiện đại: Rượu sau khi chưng cất được đưa qua hệ thống tháp lọc chuyên dụng để loại bỏ hoàn toàn cặn và tạp chất lơ lửng.',
-      'Đóng chai & khử trùng: Đóng trong chai thủy tinh dày dặn hoặc nậm gốm đã qua khử trùng nhiệt độ cao, dán tem nhãn niêm phong chứng thực nguồn gốc xuất xứ của HTX Yến Nhi.'
+      'Đóng chai & khử trùng: Đóng trong chai thủy tinh dày dặn hoặc nậm gốm đã qua khử trùng nhiệt độ cao, dán tem nhãn niêm phong chứng thực nguồn gốc xuất xứ của HTX Yến Nhi.',
     ],
-    secret: 'Mỗi mẻ rượu xuất xưởng đều được đo nồng độ và kiểm nghiệm an toàn thực phẩm, đảm bảo chỉ số Methanol luôn ở mức an toàn gần như bằng 0.'
-  }
+    secret:
+      'Mỗi mẻ rượu xuất xưởng đều được đo nồng độ và kiểm nghiệm an toàn thực phẩm, đảm bảo chỉ số Methanol luôn ở mức an toàn gần như bằng 0.',
+  },
 ];
 
-export default function ProcessModal({ isOpen, onClose, initialStep = 1, onOpenOrder, hotline = '0372.477.078' }) {
+export default function ProcessModal({
+  isOpen,
+  onClose,
+  initialStep = 1,
+  steps = [],
+  hotline = '0372.477.078',
+}) {
   const [activeStep, setActiveStep] = useState(initialStep);
+
+  // Đồng bộ dữ liệu từ Admin (steps) với dữ liệu chi tiết mặc định
+  const mergedSteps = (steps?.length ? steps : DETAILED_STEPS).map((s, idx) => {
+    const def = DETAILED_STEPS[idx] || DETAILED_STEPS[0];
+    return {
+      stepNumber: s.stepNumber || idx + 1,
+      shortTitle: s.title || def.title,
+      title: s.detailTitle || s.title || def.title,
+      subtitle: s.subtitle || def.subtitle,
+      imageUrl: s.imageUrl || def.imageUrl,
+      lead: s.lead || def.lead,
+      details: s.details?.length ? s.details : def.details,
+      secret: s.secret || def.secret,
+    };
+  });
 
   useEffect(() => {
     if (initialStep) setActiveStep(initialStep);
@@ -82,7 +107,10 @@ export default function ProcessModal({ isOpen, onClose, initialStep = 1, onOpenO
 
   if (!isOpen) return null;
 
-  const currentStep = DETAILED_STEPS[activeStep - 1] || DETAILED_STEPS[0];
+  const currentStep =
+    mergedSteps.find((s) => s.stepNumber === activeStep) ||
+    mergedSteps[activeStep - 1] ||
+    mergedSteps[0];
 
   return (
     <div className="process-modal-overlay" onClick={onClose}>
@@ -102,15 +130,15 @@ export default function ProcessModal({ isOpen, onClose, initialStep = 1, onOpenO
             <FiAward size={13} /> BÍ QUYẾT GIA TRUYỀN DÂN TỘC
           </div>
           <h2 className="process-modal-heading">
-            CHI TIẾT 4 BƯỚC QUY TRÌNH NẤU RƯỢU MEN LÁ
+            CHI TIẾT QUY TRÌNH NẤU RƯỢU MEN LÁ
           </h2>
           <p className="process-modal-sub">
-            Khám phá trọn vẹn quy trình ủ nấu thủ công tạo nên giọt rượu êm dịu, chuẩn vị đại ngàn Tây Bắc
+            Khám phá trọn vẹn quy trình ủ nấu thủ công tạo nên giọt rượu êm dịu, chuẩn vị đại ngàn
           </p>
 
           {/* Stepper Tabs */}
           <div className="process-stepper-tabs">
-            {DETAILED_STEPS.map((s) => (
+            {mergedSteps.map((s) => (
               <button
                 key={s.stepNumber}
                 type="button"
@@ -118,7 +146,7 @@ export default function ProcessModal({ isOpen, onClose, initialStep = 1, onOpenO
                 onClick={() => setActiveStep(s.stepNumber)}
               >
                 <span className="tab-num">Bước {s.stepNumber}</span>
-                <span className="tab-title">{s.title.split('&')[0]}</span>
+                <span className="tab-title">{s.shortTitle}</span>
               </button>
             ))}
           </div>
@@ -130,7 +158,9 @@ export default function ProcessModal({ isOpen, onClose, initialStep = 1, onOpenO
             <div className="step-detail-top">
               <div className="step-detail-img-wrap">
                 <img src={currentStep.imageUrl} alt={currentStep.title} />
-                <span className="step-badge-large">BƯỚC {currentStep.stepNumber} / 4</span>
+                <span className="step-badge-large">
+                  BƯỚC {currentStep.stepNumber} / {mergedSteps.length}
+                </span>
               </div>
 
               <div className="step-detail-info">
@@ -164,13 +194,13 @@ export default function ProcessModal({ isOpen, onClose, initialStep = 1, onOpenO
           </div>
         </div>
 
-        {/* Footer Modal: Điều hướng bước và nút hành động */}
+        {/* Footer Modal */}
         <div className="process-modal-footer">
           <div className="stepper-nav-btns">
             <button
               type="button"
               className="btn btn-outline btn-step-nav"
-              disabled={activeStep === 1}
+              disabled={activeStep <= 1}
               onClick={() => setActiveStep(Math.max(1, activeStep - 1))}
             >
               ← Bước trước
@@ -178,8 +208,8 @@ export default function ProcessModal({ isOpen, onClose, initialStep = 1, onOpenO
             <button
               type="button"
               className="btn btn-primary btn-step-nav"
-              disabled={activeStep === DETAILED_STEPS.length}
-              onClick={() => setActiveStep(Math.min(DETAILED_STEPS.length, activeStep + 1))}
+              disabled={activeStep >= mergedSteps.length}
+              onClick={() => setActiveStep(Math.min(mergedSteps.length, activeStep + 1))}
             >
               Bước tiếp theo →
             </button>
