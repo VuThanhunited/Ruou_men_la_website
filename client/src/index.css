@@ -74,6 +74,16 @@ html {
   font-size: 16px;
 }
 
+/* Scroll offset for fixed navbar */
+#hero,
+#gioi-thieu,
+#san-pham,
+#quy-trinh,
+#tin-tuc,
+#lien-he {
+  scroll-margin-top: 88px;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--color-bg);

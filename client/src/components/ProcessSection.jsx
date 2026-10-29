@@ -5,7 +5,7 @@ const STEP_EMOJIS = ['🌾', '🌿', '🏺', '✨'];
 const LEAF_TR = '/assets/leaf-corner-tr.svg';
 const LEAF_BL = '/assets/leaf-corner-bl.svg';
 
-export default function ProcessSection({ section, steps = [] }) {
+export default function ProcessSection({ section, steps = [], onOpenProcessModal }) {
   return (
     <section className="process-section" id="quy-trinh">
       {/* Static leaf decorations */}
@@ -31,19 +31,13 @@ export default function ProcessSection({ section, steps = [] }) {
             <p className="process-section-desc">
               {section?.sectionDescription || 'Rượu Men Lá Yến Nhi được làm từ gạo nếp chọn lọc, men lá rừng truyền thống, ủ thủ công theo bí quyết dân gian, đảm bảo hương vị thuần khiết và an toàn cho sức khỏe.'}
             </p>
-            <Link
-              to={section?.buttonLink || '#quy-trinh'}
+            <button
+              type="button"
               className="btn btn-primary"
-              onClick={(e) => {
-                const link = section?.buttonLink || '#quy-trinh';
-                if (link.startsWith('#')) {
-                  e.preventDefault();
-                  document.querySelector(link)?.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
+              onClick={() => onOpenProcessModal && onOpenProcessModal(1)}
             >
               {section?.buttonText || 'XEM CHI TIẾT QUY TRÌNH'} <FiArrowRight />
-            </Link>
+            </button>
           </div>
 
           {/* RIGHT: Steps với mũi tên */}
@@ -51,7 +45,12 @@ export default function ProcessSection({ section, steps = [] }) {
             <div className="process-steps-grid">
               {steps.map((step, idx) => (
                 <div key={step._id || idx} style={{ display: 'flex', alignItems: 'flex-start' }}>
-                  <div className="process-step">
+                  <div
+                    className="process-step"
+                    onClick={() => onOpenProcessModal && onOpenProcessModal(step.stepNumber || idx + 1)}
+                    style={{ cursor: 'pointer' }}
+                    title={`Bấm để xem chi tiết Bước ${step.stepNumber}: ${step.title}`}
+                  >
                     {/* Ảnh tròn cố định 1:1 */}
                     <div className="process-step-img-wrap">
                       {step.imageUrl ? (

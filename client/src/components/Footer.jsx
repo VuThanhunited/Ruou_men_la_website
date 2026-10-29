@@ -8,7 +8,7 @@ const QUICK_LINKS = [
   { label: 'Giới thiệu', href: '#gioi-thieu' },
   { label: 'Sản phẩm', href: '#san-pham' },
   { label: 'Quy trình', href: '#quy-trinh' },
-  { label: 'Tin tức', href: '#' },
+  { label: 'Tin tức', href: '#tin-tuc' },
   { label: 'Liên hệ', href: '#lien-he' },
 ];
 
@@ -17,8 +17,9 @@ export default function Footer({ config }) {
 
   const handleNav = (e, href) => {
     e.preventDefault();
-    if (href.startsWith('#')) {
-      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    if (href && href.startsWith('#') && href.length > 1) {
+      const el = document.querySelector(href);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 

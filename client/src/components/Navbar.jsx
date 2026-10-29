@@ -103,7 +103,7 @@ export default function Navbar({ hotline = '0866.603.589' }) {
       {mobileOpen && <div className="mobile-overlay" onClick={() => setMobileOpen(false)} />}
       <div className={`mobile-menu ${mobileOpen ? 'open' : ''}`}>
         <div className="mobile-menu-header">
-          <img src={LOGO} alt="Logo" style={{ width: 56, height: 56, borderRadius: '50%', objectFit: 'cover' }} />
+          <img src={LOGO} alt="Logo" style={{ width: 66, height: 66, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--color-accent-gold)' }} />
           <button className="mobile-close" onClick={() => setMobileOpen(false)}>
             <FiX />
           </button>

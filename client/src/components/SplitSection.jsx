@@ -2,7 +2,7 @@ import { FiArrowRight } from 'react-icons/fi';
 
 const DIVIDER_SVG = '/assets/divider.svg';
 
-export default function SplitSection({ intro, products = [], onOpenAbout }) {
+export default function SplitSection({ intro, products = [], onOpenAbout, onSelectProduct }) {
   return (
     <section className="split-section" id="san-pham">
       {/* LEFT: Intro banner xanh đậm */}
@@ -63,7 +63,12 @@ export default function SplitSection({ intro, products = [], onOpenAbout }) {
 
         <div className="products-grid">
           {products.map((product, idx) => (
-            <div key={product._id || idx} className="product-card">
+            <div
+              key={product._id || idx}
+              className="product-card"
+              onClick={() => onSelectProduct && onSelectProduct(product)}
+              style={{ cursor: 'pointer' }}
+            >
               <div className="product-card-img-wrap">
                 {product.thumbnailUrl ? (
                   <img
@@ -79,7 +84,16 @@ export default function SplitSection({ intro, products = [], onOpenAbout }) {
                 <div className="product-card-name">{product.name}</div>
                 <div className="product-card-volume">{product.volume}</div>
                 <div className="product-card-btn-wrap">
-                  <button className="product-card-btn">XEM CHI TIẾT</button>
+                  <button
+                    type="button"
+                    className="product-card-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (onSelectProduct) onSelectProduct(product);
+                    }}
+                  >
+                    XEM CHI TIẾT
+                  </button>
                 </div>
               </div>
             </div>

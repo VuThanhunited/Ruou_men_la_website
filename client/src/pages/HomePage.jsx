@@ -10,6 +10,9 @@ import NewsSection, { DEFAULT_ARTICLES } from '../components/NewsSection';
 import TestimonialsSection from '../components/TestimonialsSection';
 import CompanyModal from '../components/CompanyModal';
 import NewsModal from '../components/NewsModal';
+import ProductDetailModal from '../components/ProductDetailModal';
+import ProcessModal from '../components/ProcessModal';
+import OrderModal from '../components/OrderModal';
 import Footer from '../components/Footer';
 
 // ============================================================
@@ -129,6 +132,9 @@ export default function HomePage() {
 
   const [companyModalOpen, setCompanyModalOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [processModalState, setProcessModalState] = useState({ isOpen: false, step: 1 });
+  const [orderItem, setOrderItem] = useState(null);
 
   // Fetch từ API — nếu thành công thì override static data
   useEffect(() => {
@@ -180,8 +186,13 @@ export default function HomePage() {
           intro={data.intro}
           products={data.products}
           onOpenAbout={() => setCompanyModalOpen(true)}
+          onSelectProduct={(product) => setSelectedProduct(product)}
         />
-        <ProcessSection section={data.process} steps={data.steps} />
+        <ProcessSection
+          section={data.process}
+          steps={data.steps}
+          onOpenProcessModal={(stepNum) => setProcessModalState({ isOpen: true, step: stepNum || 1 })}
+        />
         <BrandStorySection
           data={data.brandStory}
           onOpenCompanyModal={() => setCompanyModalOpen(true)}
@@ -205,6 +216,31 @@ export default function HomePage() {
       <NewsModal
         article={selectedArticle}
         onClose={() => setSelectedArticle(null)}
+      />
+
+      <ProductDetailModal
+        product={selectedProduct}
+        isOpen={Boolean(selectedProduct)}
+        onClose={() => setSelectedProduct(null)}
+        onOrderNow={(productWithQty) => {
+          setSelectedProduct(null);
+          setOrderItem(productWithQty);
+        }}
+        hotline={data.hero?.hotline || data.config?.phone1}
+      />
+
+      <ProcessModal
+        isOpen={processModalState.isOpen}
+        initialStep={processModalState.step}
+        onClose={() => setProcessModalState({ isOpen: false, step: 1 })}
+        hotline={data.hero?.hotline || data.config?.phone1}
+      />
+
+      <OrderModal
+        orderItem={orderItem}
+        isOpen={Boolean(orderItem)}
+        onClose={() => setOrderItem(null)}
+        hotline={data.hero?.hotline || data.config?.phone1}
       />
     </>
   );
