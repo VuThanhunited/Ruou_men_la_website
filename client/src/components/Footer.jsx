@@ -26,9 +26,9 @@ export default function Footer({ config }) {
   const c = config || {};
   const logo = c.logoUrl || LOGO;
   const name = c.companyName || 'HỢP TÁC XÃ DỊCH VỤ THƯƠNG MẠI YẾN NHI';
-  const address = c.address || 'Thôn Xín Chải, Xã Sơn Vĩ, Tỉnh Tuyên Quang';
-  const phone1 = c.phone1 || '0866.603.589';
-  const phone2 = c.phone2 || '0812.838.589';
+  const address = c.address || 'Thôn Tân Đồng, Xã Nam Dương, Thành Phố Bắc Ninh';
+  const phone1 = c.phone1 || '0372.477.078';
+  const phone2 = c.phone2 || '';
   const emailAddr = c.email || 'yen.nhi.ruoumenla@gmail.com';
 
   return (
@@ -105,17 +105,17 @@ export default function Footer({ config }) {
             <div className="footer-social">
               <a href={c.facebookUrl || '#'} target="_blank" rel="noopener noreferrer" title="Facebook">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
                 </svg>
               </a>
               <a href={c.youtubeUrl || '#'} target="_blank" rel="noopener noreferrer" title="YouTube">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                 </svg>
               </a>
               <a href={c.tiktokUrl || '#'} target="_blank" rel="noopener noreferrer" title="TikTok">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-                  <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.79a8.18 8.18 0 004.78 1.52V6.84a4.85 4.85 0 01-1.01-.15z"/>
+                  <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.79a8.18 8.18 0 004.78 1.52V6.84a4.85 4.85 0 01-1.01-.15z" />
                 </svg>
               </a>
               <a href={c.zaloUrl || '#'} target="_blank" rel="noopener noreferrer" title="Zalo"

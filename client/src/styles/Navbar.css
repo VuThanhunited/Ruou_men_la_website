@@ -300,9 +300,43 @@
 
   .navbar-mobile-toggle {
     display: flex;
+    font-size: 1.5rem;
+    color: var(--color-primary, #1C3319);
+    padding: 0.5rem;
+    border-radius: 8px;
+    background: rgba(245, 239, 224, 0.7);
+    transition: background 0.2s ease;
+  }
+
+  .navbar-mobile-toggle:hover {
+    background: rgba(245, 239, 224, 1);
   }
 
   .mobile-overlay {
     display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar .container {
+    padding: 0 1rem;
+  }
+
+  .navbar-inner {
+    height: 68px;
+  }
+
+  .navbar-logo img {
+    width: 58px;
+    height: 58px;
+  }
+
+  .navbar.scrolled .navbar-inner {
+    height: 60px;
+  }
+
+  .navbar.scrolled .navbar-logo img {
+    width: 50px;
+    height: 50px;
   }
 }

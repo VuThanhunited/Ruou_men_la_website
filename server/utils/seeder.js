@@ -34,7 +34,7 @@ const seed = async () => {
       description:
         'Rượu Men Lá Yến Nhi được ủ từ những nguyên liệu thiên nhiên, kết tinh hoa của núi rừng và bàn tay người dân tộc, mang đến hương vị đậm đà, mộc mạc, tốt cho sức khỏe.',
       ctaText: 'KHÁM PHÁ SẢN PHẨM',
-      hotline: '0866.603.589',
+      hotline: '0372.477.078',
       sideBannerText: 'Rượu sạch từ thiên nhiên',
     });
     console.log('✅ Hero data seeded');
@@ -175,10 +175,9 @@ const seed = async () => {
   const configExists = await SiteConfig.findOne();
   if (!configExists) {
     await SiteConfig.create({
-      companyName: 'Hợp tác xã Dịch Vụ Thương mại Yến Nhi',
-      address: 'Thôn Xín Chải, Xã Sơn Vĩ, Tỉnh Tuyên Quang',
-      phone1: '0866.603.589',
-      phone2: '0812.838.589',
+      companyName: 'Hợp Tác Xã Dịch Vụ Thương Mại Yến Nhi',
+      address: 'Thôn Tân Đồng, Xã Nam Dương, Thành Phố Bắc Ninh',
+      phone1: '0372.477.078',
       email: 'yen.nhi.ruoumenla@gmail.com',
       metaTitle: 'Rượu Men Lá Yến Nhi - Hương vị truyền thống từ núi rừng',
     });

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiX, FiPhone, FiCheck, FiShoppingBag, FiShield, FiAward, FiTruck } from 'react-icons/fi';
 import '../styles/ProductDetailModal.css';
 
-export default function ProductDetailModal({ product, isOpen, onClose, onOrderNow, hotline = '0866.603.589' }) {
+export default function ProductDetailModal({ product, isOpen, onClose, onOrderNow, hotline = '0372.477.078' }) {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
@@ -119,7 +119,7 @@ export default function ProductDetailModal({ product, isOpen, onClose, onOrderNo
               </div>
               <div className="spec-row">
                 <span className="spec-name">🏡 Xuất xứ:</span>
-                <span className="spec-val">HTX Dịch Vụ Thương Mại Yến Nhi - Tuyên Quang</span>
+                <span className="spec-val">HTX Dịch Vụ Thương Mại Yến Nhi - Bắc Ninh</span>
               </div>
             </div>
 

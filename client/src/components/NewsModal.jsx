@@ -69,7 +69,7 @@ export default function NewsModal({ article, onClose }) {
             )}
 
             <div className="news-author-note">
-              <strong>Biên tập:</strong> Ban Truyền Thông HTX Yến Nhi • Tuyên Quang
+              <strong>Biên tập:</strong> Ban Truyền Thông HTX Dịch Vụ Thương Mại Yến Nhi
             </div>
           </div>
         </div>

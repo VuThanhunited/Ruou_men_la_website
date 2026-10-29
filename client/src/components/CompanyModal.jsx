@@ -23,8 +23,8 @@ export default function CompanyModal({ isOpen, onClose, config }) {
 
   if (!isOpen) return null;
 
-  const phone = config?.phone1 || '0866.603.589';
-  const address = config?.address || 'Thôn Xín Chải, Xã Sơn Vĩ, Tỉnh Tuyên Quang';
+  const phone = config?.phone1 || '0372.477.078';
+  const address = config?.address || 'Thôn Tân Đồng, Xã Nam Dương, Thành Phố Bắc Ninh';
   const email = config?.email || 'yen.nhi.ruoumenla@gmail.com';
 
   return (
@@ -52,7 +52,7 @@ export default function CompanyModal({ isOpen, onClose, config }) {
                 HỢP TÁC XÃ DỊCH VỤ THƯƠNG MẠI YẾN NHI
               </h2>
               <p className="company-modal-subtitle">
-                Gìn giữ &amp; lan tỏa tinh hoa rượu men lá truyền thống núi rừng Tuyên Quang
+                Gìn giữ &amp; lan tỏa tinh hoa rượu men lá truyền thống sạch từ thiên nhiên
               </p>
             </div>
           </div>
@@ -66,7 +66,7 @@ export default function CompanyModal({ isOpen, onClose, config }) {
               <span className="company-card-icon">🍃</span> Câu Chuyện Khởi Nguồn &amp; Sứ Mệnh
             </h3>
             <p className="company-card-text">
-              Sinh ra từ núi rừng đại ngàn Sơn Vĩ - Tuyên Quang, <strong>Hợp Tác Xã Dịch Vụ Thương Mại Yến Nhi</strong> được thành lập với tâm huyết bảo tồn và kế thừa phương thức ủ rượu men lá độc bản của đồng bào các dân tộc thiểu số miền núi phía Bắc.
+              Khởi nguồn từ niềm đam mê gìn giữ văn hóa ẩm thực truyền thống quê hương, <strong>Hợp Tác Xã Dịch Vụ Thương Mại Yến Nhi</strong> (địa chỉ tại Thôn Tân Đồng, Xã Nam Dương, Thành Phố Bắc Ninh) được thành lập với tâm huyết bảo tồn và kế thừa phương thức ủ rượu men lá độc bản của đồng bào miền núi phía Bắc.
             </p>
             <p className="company-card-text">
               Chúng tôi tâm niệm rằng: <em>"Một giọt rượu ngon không chỉ làm ấm lòng người thưởng thức, mà còn là sợi dây gắn kết văn hóa, niềm tự hào của quê hương"</em>. Sứ mệnh của Yến Nhi là mang đến cho gia đình Việt sản phẩm rượu truyền thống sạch 100%, an toàn cho sức khỏe và chuẩn vị quê hương.

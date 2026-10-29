@@ -14,7 +14,7 @@ const NAV_LINKS = [
 
 const LOGO = '/assets/logo.jpg';
 
-export default function Navbar({ hotline = '0866.603.589' }) {
+export default function Navbar({ hotline = '0372.477.078' }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('#hero');

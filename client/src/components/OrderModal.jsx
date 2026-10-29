@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiX, FiCheckCircle, FiPhone, FiTruck, FiShoppingBag } from 'react-icons/fi';
 import '../styles/OrderModal.css';
 
-export default function OrderModal({ orderItem, isOpen, onClose, hotline = '0866.603.589' }) {
+export default function OrderModal({ orderItem, isOpen, onClose, hotline = '0372.477.078' }) {
   const [form, setForm] = useState({
     name: '',
     phone: '',

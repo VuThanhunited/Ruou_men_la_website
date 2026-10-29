@@ -57,7 +57,7 @@ const DETAILED_STEPS = [
   }
 ];
 
-export default function ProcessModal({ isOpen, onClose, initialStep = 1, onOpenOrder, hotline = '0866.603.589' }) {
+export default function ProcessModal({ isOpen, onClose, initialStep = 1, onOpenOrder, hotline = '0372.477.078' }) {
   const [activeStep, setActiveStep] = useState(initialStep);
 
   useEffect(() => {
