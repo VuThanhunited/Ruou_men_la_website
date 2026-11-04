@@ -1,8 +1,15 @@
 import axios from 'axios';
 
-const rawBaseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api')
-  .trim()
-  .replace(/\/+$/, '');
+const envApiUrl = (import.meta.env.VITE_API_URL || '').trim();
+// Nếu đang chạy production (Vercel / Hosting C4 Nginx) và chưa cấu hình hoặc vẫn trỏ Render cũ,
+// dùng đường dẫn tương đối '/api' để proxy thẳng về Hosting C4 (http://45.119.214.68:5001/api)
+const useRelativeProxy =
+  import.meta.env.PROD && (!envApiUrl || envApiUrl.includes('onrender.com'));
+
+const rawBaseUrl = useRelativeProxy
+  ? '/api'
+  : (envApiUrl || 'http://localhost:5000/api').replace(/\/+$/, '');
+
 const baseURL = rawBaseUrl.endsWith('/api') ? rawBaseUrl : `${rawBaseUrl}/api`;
 
 const api = axios.create({
