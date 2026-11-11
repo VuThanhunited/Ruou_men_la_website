@@ -1,0 +1,8 @@
+PassengerStartupFile app.js
+PassengerAppType node
+PassengerFriendlyErrorPages on
+PassengerMaxRequests 1000
+PassengerMaxPoolSize 3
+PassengerMinInstances 1
+PassengerIdleTimeout 600
+PassengerStartTimeout 120

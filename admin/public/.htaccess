@@ -1,0 +1,9 @@
+Options -MultiViews
+RewriteEngine On
+
+# ── Bỏ qua file & thư mục thực sự tồn tại ────────────────────────────────────
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# ── Admin SPA (hỗ trợ cả chạy tại /admin-panel/ trên C2 lẫn chạy tại gốc /) ─
+RewriteRule ^ index.html [L]

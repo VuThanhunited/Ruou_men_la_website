@@ -1,0 +1,17 @@
+Options -MultiViews
+RewriteEngine On
+
+# ── Không redirect HTTPS trực tiếp để tránh loop với proxy trên Cloud C2 ──────
+
+# ── Bỏ qua file & thư mục thực sự tồn tại (assets, uploads, admin-panel) ────
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# ── Bypass /api/* và /uploads/* để Phusion Passenger (Node.js) xử lý ─────────
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteCond %{REQUEST_URI} !^/api$
+RewriteCond %{REQUEST_URI} !^/uploads/
+RewriteCond %{REQUEST_URI} !^/admin-panel/
+
+# ── React SPA: Tất cả routes còn lại → /index.html ──────────────────────────
+RewriteRule ^ /index.html [L]

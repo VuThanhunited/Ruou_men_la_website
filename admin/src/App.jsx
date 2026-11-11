@@ -24,8 +24,13 @@ function ProtectedRoute({ children }) {
 }
 
 export default function App() {
+  const isSubFolder =
+    typeof window !== 'undefined' &&
+    window.location.pathname.startsWith('/admin-panel');
+  const basename = isSubFolder ? '/admin-panel' : '/';
+
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Routes>
         {/* Auth */}
         <Route path="/login" element={<AdminLoginPage />} />

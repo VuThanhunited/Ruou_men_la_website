@@ -23,6 +23,9 @@ if (hasCloudinary) {
 const getSubFolder = (req) =>
   (req.uploadFolder || 'ruou-men-la/general').replace(/^ruou-men-la\/?/, '') || 'general';
 
+const getUploadBaseDir = () =>
+  process.env.UPLOAD_DIR || path.join(__dirname, '..', 'uploads');
+
 const storage = hasCloudinary
   ? new CloudinaryStorage({
       cloudinary,
@@ -38,7 +41,7 @@ const storage = hasCloudinary
   : multer.diskStorage({
       destination: (req, file, cb) => {
         const subFolder = getSubFolder(req);
-        const dest = path.join(__dirname, '..', 'uploads', subFolder);
+        const dest = path.join(getUploadBaseDir(), subFolder);
         fs.mkdirSync(dest, { recursive: true });
         cb(null, dest);
       },

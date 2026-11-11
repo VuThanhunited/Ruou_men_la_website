@@ -30,7 +30,8 @@ api.interceptors.response.use(
   (err) => {
     if (err.response?.status === 401 && localStorage.getItem('adminToken')) {
       localStorage.removeItem('adminToken');
-      window.location.href = '/login';
+      const prefix = window.location.pathname.startsWith('/admin-panel') ? '/admin-panel' : '';
+      window.location.href = `${prefix}/login`;
     }
     return Promise.reject(err);
   }

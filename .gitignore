@@ -44,3 +44,5 @@ Thumbs.db
 # Local runtime data & uploads
 server/data/
 server/uploads/
+server/backups/
+*.zip

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "seed": "node utils/seeder.js"
+    "seed": "node utils/seeder.js",
+    "backup:c2": "node scripts/backup_to_c2.js"
   },
   "keywords": [],
   "author": "Yến Nhi",

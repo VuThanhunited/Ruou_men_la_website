@@ -45,12 +45,15 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 // Phục vụ file upload tĩnh (Local Fallback khi chưa cấu hình Cloudinary)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const uploadDir = process.env.UPLOAD_DIR || path.join(__dirname, 'uploads');
+app.use('/uploads', express.static(uploadDir));
 
 // ===========================
 // ROUTES
 // ===========================
 app.get('/', (req, res) => res.json({ message: '🍶 Rượu Men Lá API đang chạy!' }));
+app.get('/api/ping', (req, res) => res.json({ ok: true, ts: Date.now() }));
+app.get('/api/health', (req, res) => res.json({ status: 'OK', timestamp: new Date().toISOString() }));
 app.use('/api/auth', authRoutes);
 app.use('/api', contentRoutes);
 
