@@ -103,7 +103,11 @@ async function main() {
   try {
     ({ Client } = require('basic-ftp'));
   } catch {
-    ({ Client } = require(path.join(SERVER_DIR, 'node_modules', 'basic-ftp')));
+    try {
+      ({ Client } = require(path.join(SERVER_DIR, 'node_modules', 'basic-ftp')));
+    } catch {
+      ({ Client } = require(path.join(ROOT, '..', 'TEM', 'node_modules', 'basic-ftp')));
+    }
   }
 
   const ftp = new Client();
@@ -144,3 +148,4 @@ try {
 } catch (_) {}
 
 main();
+
