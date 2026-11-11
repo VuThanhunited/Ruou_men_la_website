@@ -21,6 +21,10 @@ const app = express();
 app.use(helmet({ crossOriginResourcePolicy: false }));
 
 const allowedOrigins = [
+  'https://www.htxyennhi.com',
+  'https://htxyennhi.com',
+  'http://www.htxyennhi.com',
+  'http://htxyennhi.com',
   'http://localhost:5173',
   'http://localhost:5174',
   'http://127.0.0.1:5173',
