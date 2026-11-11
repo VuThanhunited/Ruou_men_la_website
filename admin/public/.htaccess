@@ -7,3 +7,4 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 # ── Admin SPA (hỗ trợ cả chạy tại /admin-panel/ trên C2 lẫn chạy tại gốc /) ─
 RewriteRule ^ index.html [L]
+
