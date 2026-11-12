@@ -60,7 +60,7 @@ const rawUpload = multer({
 const normalizeFileUrl = (req, file) => {
   if (!file || hasCloudinary) return;
   const subFolder = getSubFolder(req);
-  const baseUrl = process.env.SERVER_PUBLIC_URL || `${req.protocol}://${req.get('host')}`;
+  const baseUrl = process.env.SERVER_PUBLIC_URL ? process.env.SERVER_PUBLIC_URL.replace(/\/$/, '') : '';
   file.path = `${baseUrl}/uploads/${subFolder}/${file.filename}`;
 };
 

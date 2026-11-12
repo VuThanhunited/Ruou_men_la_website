@@ -147,6 +147,7 @@ const brandStorySchema = new mongoose.Schema(
 const newsSchema = new mongoose.Schema(
   {
     imageUrl: { type: String, default: '' },
+    images: { type: [String], default: [] },
     category: { type: String, default: 'Tin Tức HTX' },
     date: { type: String, default: '' },
     readTime: { type: String, default: '3 phút đọc' },

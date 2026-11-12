@@ -196,11 +196,12 @@ export default function ImageCropperField({
     if (!file || !file.type.startsWith('image/')) return;
     setRawFile(file);
 
+    const objUrl = URL.createObjectURL(file);
+    setPreviewUrl(objUrl);
+    onCropped?.(file, objUrl);
+
     // Nếu là ảnh SVG hoặc GIF động, dùng trực tiếp không bắt buộc qua canvas
-    if (file.type === 'image/svg+xml') {
-      const objUrl = URL.createObjectURL(file);
-      setPreviewUrl(objUrl);
-      onCropped?.(file, objUrl);
+    if (file.type === 'image/svg+xml' || file.type === 'image/gif') {
       return;
     }
 
@@ -360,9 +361,16 @@ export default function ImageCropperField({
           />
         </div>
 
-        {/* Quick Tools: Dán URL hoặc Chọn từ thư viện có sẵn */}
+        {/* Quick Tools: Chọn file từ máy tính, Dán URL hoặc Chọn từ thư viện có sẵn */}
         {!disabled && (
           <div className="img-crop-quick-tools">
+            <button
+              type="button"
+              className="img-crop-tool-btn"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <FiUpload size={12} /> Chọn file từ máy tính
+            </button>
             <button
               type="button"
               className={`img-crop-tool-btn ${showUrlInput ? 'active' : ''}`}
@@ -372,7 +380,7 @@ export default function ImageCropperField({
                 setUrlInputValue(previewUrl.startsWith('blob:') ? '' : previewUrl);
               }}
             >
-              <FiLink size={12} /> Nhập link ảnh
+              <FiLink size={12} /> Nhập link ảnh (URL)
             </button>
             <button
               type="button"
@@ -394,7 +402,14 @@ export default function ImageCropperField({
               className="admin-form-input"
               placeholder="Dán đường dẫn ảnh (https://... hoặc /assets/...)"
               value={urlInputValue}
-              onChange={(e) => setUrlInputValue(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                setUrlInputValue(val);
+                if (val.trim()) {
+                  setPreviewUrl(val.trim());
+                  onCropped?.(null, val.trim());
+                }
+              }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();

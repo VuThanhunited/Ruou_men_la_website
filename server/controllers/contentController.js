@@ -284,8 +284,20 @@ exports.getAllNews = async (req, res) => {
 exports.createNews = async (req, res) => {
   const updateData = { ...req.body };
   if (req.file) updateData.imageUrl = req.file.path;
+  if (req.files?.imageUrl?.[0]) updateData.imageUrl = req.files.imageUrl[0].path;
+
   if (updateData.content !== undefined) {
     updateData.content = parseStringArray(updateData.content);
+  }
+  if (updateData.images !== undefined) {
+    updateData.images = parseStringArray(updateData.images);
+  }
+  if (req.files?.galleryFiles?.length) {
+    const uploadedUrls = req.files.galleryFiles.map((f) => f.path);
+    updateData.images = [...(updateData.images || []), ...uploadedUrls];
+  }
+  if (!updateData.imageUrl && updateData.images?.length) {
+    updateData.imageUrl = updateData.images[0];
   }
   if (!updateData.date) {
     updateData.date = new Date().toLocaleDateString('vi-VN');
@@ -297,8 +309,20 @@ exports.createNews = async (req, res) => {
 exports.updateNews = async (req, res) => {
   const updateData = { ...req.body };
   if (req.file) updateData.imageUrl = req.file.path;
+  if (req.files?.imageUrl?.[0]) updateData.imageUrl = req.files.imageUrl[0].path;
+
   if (updateData.content !== undefined) {
     updateData.content = parseStringArray(updateData.content);
+  }
+  if (updateData.images !== undefined) {
+    updateData.images = parseStringArray(updateData.images);
+  }
+  if (req.files?.galleryFiles?.length) {
+    const uploadedUrls = req.files.galleryFiles.map((f) => f.path);
+    updateData.images = [...(updateData.images || []), ...uploadedUrls];
+  }
+  if (!updateData.imageUrl && updateData.images?.length) {
+    updateData.imageUrl = updateData.images[0];
   }
   const data = await News.findByIdAndUpdate(req.params.id, updateData, {
     new: true,
@@ -306,6 +330,17 @@ exports.updateNews = async (req, res) => {
   });
   if (!data) return res.status(404).json({ success: false, message: 'Không tìm thấy bài viết' });
   res.json({ success: true, data });
+};
+
+exports.uploadNewsImage = async (req, res) => {
+  if (req.file) {
+    return res.json({ success: true, url: req.file.path, urls: [req.file.path] });
+  }
+  if (req.files?.length) {
+    const urls = req.files.map((f) => f.path);
+    return res.json({ success: true, url: urls[0], urls });
+  }
+  return res.status(400).json({ success: false, message: 'Chưa chọn file ảnh' });
 };
 
 exports.deleteNews = async (req, res) => {

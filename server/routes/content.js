@@ -79,8 +79,33 @@ router.put('/admin/brand-story', protect, setFolder('brand-story'), upload.singl
 
 // News / Articles
 router.get('/admin/news', protect, ctrl.getAllNews);
-router.post('/admin/news', protect, setFolder('news'), upload.single('imageUrl'), ctrl.createNews);
-router.put('/admin/news/:id', protect, setFolder('news'), upload.single('imageUrl'), ctrl.updateNews);
+router.post(
+  '/admin/news/upload',
+  protect,
+  setFolder('news'),
+  upload.array('images', 10),
+  ctrl.uploadNewsImage
+);
+router.post(
+  '/admin/news',
+  protect,
+  setFolder('news'),
+  upload.fields([
+    { name: 'imageUrl', maxCount: 1 },
+    { name: 'galleryFiles', maxCount: 10 },
+  ]),
+  ctrl.createNews
+);
+router.put(
+  '/admin/news/:id',
+  protect,
+  setFolder('news'),
+  upload.fields([
+    { name: 'imageUrl', maxCount: 1 },
+    { name: 'galleryFiles', maxCount: 10 },
+  ]),
+  ctrl.updateNews
+);
 router.delete('/admin/news/:id', protect, ctrl.deleteNews);
 
 // Testimonials

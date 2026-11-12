@@ -82,7 +82,10 @@ export default function NewsSection({ articles = DEFAULT_ARTICLES, onSelectArtic
               onClick={() => onSelectArticle && onSelectArticle(item)}
             >
               <div className="news-card-img-wrap">
-                <img src={item.imageUrl} alt={item.title} />
+                <img
+                  src={item.imageUrl || item.images?.[0] || '/assets/process-step-2.jpg'}
+                  alt={item.title}
+                />
                 <span className="news-card-badge">{item.category}</span>
               </div>
 
